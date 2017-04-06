@@ -1,53 +1,85 @@
 \section {Wymagania funkcjonalne}
-W poniższej sekcji zostaną przedstawione wymagania funkcjonalne. Najpierw natomiast muszą zostać przedstawieni aktorzy, których lista i opis znajdują się w poniższej tabeli.
-\newline
+W poniższej sekcji przedstawiono wymagania funkcjonalne projektowanego systemu. Najpierw natomiast muszą zostać przedstawieni aktorzy, których lista i opis znajdują się w poniższej tabeli.
+
+
+\begin{table}[!ht]
+\caption{\label{tab:widgets}Aktorzy systemu}
 \begin{tabular}{|c|c|} \hline
-aktor & opis aktora \\ \hline
-użytkownik   & jest to użytkownik, który obsługuje stanowisko komputerowe\\
+Aktor & Opis aktora \\ \hline
+Użytkownik   & jest to użytkownik, który obsługuje stanowisko komputerowe\\
              & w pracowni, nie musi on być nawet świadomy, że jest aktorem\\
              & w tym systemie \\ \hline
 
-administrator   & jest to użytkownik, który ma możliwość zalogowania się \\
+Administrator   & jest to użytkownik, który ma możliwość zalogowania się \\
                 & na stronie, która znajduje się na serwerze i umożliwia \\
                 & podgląd stanowisk połączonych z serwerem. \\ \hline
 
 \end{tabular}
-\newline\newline
-Po zapoznaniu się z krótkimi opisami dotyczących poszczególnych aktorów występujących w systemie
-można zapoznać się z wymaganiami funkcjonalnymi. Te wymagania znajdują się w poniższej tabeli.
-\newline\newline
+\end{table}
+\newline\newline\newline
+Po zapoznaniu się z krótkimi opisami dotyczących poszczególnych aktorów występujących w systemie można zapoznać się z wymaganiami funkcjonalnymi, które zostały zaprezentowane poniżej.
 
-\begin{tabular}{|c|c|c|c|} \hline
-l.p. & funkcjonalność & aktor & obszar \\ \hline
 
-1.  & robienie zrzutów ekranu w określonej          & użytkownik & aplikacja \\
-    & częstotliwości i przesyłanie ich do serwera   &            & stanowiska \\ \hline
-    
-2.  & konfiguracja aplikacji stanowiska, wymaga     & administrator & aplikacja \\
-    & wcześniejszego wejścia do programu oraz       &               & stanowiska \\
-    & zalogowania się na konto administratora   && \\ \hline
-    
-3.  & podgląd wielu stanowisk jednocześnie, gdzie    & administrator& serwis \\
-    & widok każdego stanowiska jest małym prostąkątem&              & internetowy \\
-    & znajdującym się obok innych na ekranie         & & \\ \hline
-    
-4.  & podgląd w lepszej jakości stanowiska oraz       & administrator & serwis \\
-    & listy uruchomionych aplikacji oraz kart i okien & & internetowy \\
-    & w przeglądarkach internetowych & & \\ \hline
-    
-5.  & możliwość włączenia i konfiguracji jednej z    & administrator & serwis \\
-    & dwóch list: whitelisty lub blacklisty stron    & & internetowy \\
-    & internetowych na które może lub nie może      && \\
-    & wchodzić użytkownik stanowiska komputerowego && \\ \hline
-    
-6. & wyświetlanie komunikatów o użytkownikach   & administrator & serwis \\
-    & wchodzą na strony spoza whitelisty (jeśli & & internetowy \\
-    & to ona jest wybrana) lub strony, która && \\
-    &znajduje się na blackliście (jeśli wybrano && \\
-    & drugą opcję) &&\\ \hline
-    
-7.  & oglądanie logów serwera oraz poszczególnych& administrator & serwis \\
-    & stanowisk komputerowych && internetowy \\ \hline
-    
+\begin{center}
+\begin{table}[!ht]
+\caption{\label{tab:widgets}Lista wymagań funkcjonalnych}
+\begin{tabular}{| m{0.5cm} | m{8cm} | m{3cm} | m{2cm} |}
+\hline
+l.p. 
+    & Funkcjonalność 
+    & Aktor 
+    & Obszar 
+\\ \hline
+    1.   
+    & robienie zrzutów ekranu w określonej częstotliwości i przesyłanie ich do serwera
+    & użytkownik
+    & aplikacja stanowiska
+\\ \hline
+    2. 
+    &konfiguracja aplikacji stanowiska, wymaga wcześniejszego zalogowania się na konto administratora
+    &administrator
+    & serwis internetowy
+\\ \hline
+    3.
+    & tworzenie i zarządzanie grupami stanowisk
+    & administrator
+    & serwis internetowy
+\\ \hline
+    4. 
+    &podgląd wielu stanowisk jednocześnie (wybór jednej lub więcej grup)
+    &administrator
+    &serwis internetowy
+\\ \hline
+    5. 
+    & podgląd w lepszej jakości obrazu ze stanowisk wraz z listą uruchomionych aplikacji oraz kart z przeglądarek internetowych
+    & administrator
+    & serwis internetowy
+\\ \hline
+    6.
+    & możliwość włączenia i konfiguracji jednej z dwóch list: white listy lub black listy, które pozwolą na wyświetlanie odpowiednich komunikatów administratorowi połączonemu do serwisu internetowego
+    & administrator
+    & serwis internetowy
+\\ \hline
 
+\end{tabular}\end{table}
+
+
+\begin{tabular}{| m{0.5cm} | m{8cm} | m{3cm} | m{2cm} |}
+\hline 
+
+    7.
+    & wyświetlanie komunikatów o użytkownikach, którzy wchodzą na strony spoza white listy lub która znajduje się na black liście w zależności od konfiguracji
+    & administrator
+    & serwis internetowy
+\\ \hline
+    8.
+    & oglądanie logów serwera oraz poszczególnych stanowisk komputerowych
+    & administrator
+    & serwis internetowy
+\\ \hline
+    
 \end{tabular}
+
+
+\end{center}
+
