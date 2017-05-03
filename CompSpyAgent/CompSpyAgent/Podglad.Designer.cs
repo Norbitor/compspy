@@ -36,6 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -45,7 +46,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1082, 363);
+            this.pictureBox1.Size = new System.Drawing.Size(1581, 696);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -62,7 +63,7 @@
             // 
             // listView1
             // 
-            this.listView1.Location = new System.Drawing.Point(499, 28);
+            this.listView1.Location = new System.Drawing.Point(13, 304);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(224, 270);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
@@ -84,7 +85,7 @@
             // 
             this.listView2.Location = new System.Drawing.Point(729, 28);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(339, 270);
+            this.listView2.Size = new System.Drawing.Size(840, 270);
             this.listView2.TabIndex = 4;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.List;
@@ -110,19 +111,28 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 22.25F);
-            this.button1.Location = new System.Drawing.Point(16, 305);
+            this.button1.Location = new System.Drawing.Point(99, 617);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(1052, 50);
+            this.button1.Size = new System.Drawing.Size(436, 50);
             this.button1.TabIndex = 7;
             this.button1.Text = "Aktualizuj";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(311, 382);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(120, 95);
+            this.listBox1.TabIndex = 8;
+            // 
             // Podglad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1082, 363);
+            this.ClientSize = new System.Drawing.Size(1581, 696);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -150,5 +160,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }

