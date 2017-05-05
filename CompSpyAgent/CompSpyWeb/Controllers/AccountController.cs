@@ -18,7 +18,7 @@ namespace CompSpyWeb.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            if (Session["UserID"] != null)
+            if (Session["UserID"] == null)
             {
                 return View();
             }

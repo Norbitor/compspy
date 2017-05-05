@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +9,10 @@ namespace CompSpyWeb.Models
     public class User
     {
         public int UserID { get; set; }
+        [Required(ErrorMessage = "To pole jest wymagane!")]
         public string Login { get; set; }
+        [Required(ErrorMessage = "To pole jest wymagane!")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime? LastLogin { get; set; }
