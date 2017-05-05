@@ -46,6 +46,7 @@ namespace CompSpyWeb.Controllers
                             {
                                 Session["UserID"] = user.UserID;
                                 Session["Administrator"] = user.IsAdmin;
+                                Session["Name"] = user.FirstName + " " + user.LastName;
                                 user.LastLogin = DateTime.Now;
                                 user.LoginAttempts = 0; // 0 the counter
                             }
@@ -126,6 +127,8 @@ namespace CompSpyWeb.Controllers
                                     string hashNewPassHex = BitConverter.ToString(hashNewPass).Replace("-", string.Empty);
 
                                     foundUser.Password = hashNewPassHex;
+                                    foundUser.EditorID = (int)Session["UserID"];
+                                    foundUser.LastEdit = DateTime.Now;
                                     ctx.Entry(foundUser).State = EntityState.Modified;
                                     ctx.SaveChanges();
                                     ViewData["Message"] = "OK";
@@ -147,7 +150,6 @@ namespace CompSpyWeb.Controllers
             else
             {
                 ModelState.AddModelError("", "Przynajmniej jedno z wymaganych pól jest nieuzupełnione!");
-
             }
             return View();
         }

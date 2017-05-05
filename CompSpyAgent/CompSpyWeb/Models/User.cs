@@ -14,6 +14,10 @@ namespace CompSpyWeb.Models
         [Required(ErrorMessage = "To pole jest wymagane!")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        [Required(ErrorMessage = "To pole jest wymagane!")]
+        public string FirstName { get; set; }
+        [Required(ErrorMessage = "To pole jest wymagane!")]
+        public string LastName { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime? LastLogin { get; set; }
         public int LoginAttempts { get; set; }
