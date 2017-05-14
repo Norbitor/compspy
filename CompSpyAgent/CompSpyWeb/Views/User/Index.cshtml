@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CompSpyWeb.Models.User>
+@{
+    ViewBag.Title = "Lista użytkowników";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table va-middle-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Login</th>
+            <th>Imię i nazwisko</th>
+            <th>Administrator</th>
+            <th>Ostatnie logowanie</th>
+            <th>Operacje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>@user.Login</td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
+                <td>@user.LastLogin</td>
+                <td>operacje...</td>
+            </tr>
+        }
+    </tbody>
+</table>

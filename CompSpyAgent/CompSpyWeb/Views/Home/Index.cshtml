@@ -2,30 +2,30 @@
     ViewBag.Title = "Strona główna";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="row">
+    <div class="col-md-12">
+        <h1>Panel główny</h1>
+        <p>Witaj w aplikacji CompSpy &mdash; programie do monitorowania aktywności użytkowników
+        na komputerach służbowych/uczelnianych. Wybierz interesującą Cię funkcję.</p>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Getting started</h2>
+        <h2>Podgląd komputerów</h2>
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            Rozpocznij monitoring komputerów w pomieszczniach, do których posiadasz uprawnienia.
         </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        <p><a class="btn btn-default" href="#">Monitoring &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        <h2>Zarządzanie stanowiskami</h2>
+        <p>Skonfiguruj monitoring komputerów oraz pogrupuj je w pomieszczenia.</p>
+        <p><a class="btn btn-default" href="#">Stanowiska &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <h2>Użytkownicy i uprawnienia</h2>
+        <p>Dodaj użytkowników do systemu i nadaj im odpowiednie uprawnienia.</p>
+        <p>@Html.ActionLink("Użytkownicy »", "Index", "User", null, new { @class = "btn btn-default" })</p>
     </div>
 </div>
