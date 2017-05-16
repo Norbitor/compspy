@@ -25,8 +25,48 @@
                 <td>@user.FirstName @user.LastName</td>
                 <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
                 <td>@user.LastLogin</td>
-                <td>operacje...</td>
+                <td>
+                    @Html.ActionLink("Edytuj", "Edit", "User", new { id = @user.UserID }, new { @class = "btn btn-primary" })
+                    <div class="dropdown dropdown-ib">
+                        <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                            Operacje
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-white">
+                            <li><a href="#" data-toggle="modal" data-target="#delConfirmDialog" class="delopt" data-id="@user.UserID">Usuń</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Modal HTML -->
+<div id="delConfirmDialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Potwierdzenie</h4>
+            </div>
+            <div class="modal-body">
+                <p>Czy na pewno chcesz usunąć tego użytkownika?</p>
+                <p class="text-warning" style="color:#808080">
+                    <small>
+                        Usunięcie użytkownika jest operacją nieodwracalną.
+                    </small>
+                </p>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("Delete", "User", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken();
+                    <input type="hidden" name="userId" id="user-id" />
+                    <input type="submit" value="Usuń" class="btn btn-danger" style="width: 100px" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 100px">Anuluj</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
