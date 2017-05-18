@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Threading;
 using NDde.Client;
 
 namespace CompSpyAgent
@@ -17,6 +18,9 @@ namespace CompSpyAgent
 
         public Process[] listaProcesow;
         public List<String> listaStron;
+        public bool automatycznie;
+        public int czasAutomatycznie;
+        public DateTime czasOst;
 
 
             public Spy()
@@ -25,8 +29,22 @@ namespace CompSpyAgent
             zrzut = Graphics.FromImage(bmp);
 
             listaStron = new List<String>();
-       
+
+            automatycznie = false;
+            czasAutomatycznie = 30;
+            czasOst = DateTime.Now;
+
+            Thread watek = new Thread(() =>
+            {
+                TimeSpan ts = DateTime.Now - czasOst;
+                //if (TimeSpan.Compare()) ;
+            }
+            );
+            watek.Start();
+
         }     
+
+
         
         public void Aktualizacja()
         {
