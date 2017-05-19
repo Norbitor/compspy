@@ -13,6 +13,8 @@ namespace CompSpyWeb.Controllers
 {
     public class UserController : Controller
     {
+        private CompSpyContext db = new CompSpyContext();
+
         public ActionResult Index()
         {
             if (Session["UserID"] == null)
@@ -21,8 +23,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                var ctx = new CompSpyContext();
-                return View(ctx.Users.ToList());
+                return View(db.Users.ToList());
             }
             return RedirectToAction("", "Home");
         }
@@ -51,14 +52,11 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                using (var ctx = new CompSpyContext())
-                {
-                    user.CreatedOn = DateTime.Now;
-                    user.CreatorID = (int)Session["UserID"];
-                    user.Password = HashPassword(user.Password);
-                    ctx.Users.Add(user);
-                    ctx.SaveChanges();
-                }
+                user.CreatedOn = DateTime.Now;
+                user.CreatorID = (int)Session["UserID"];
+                user.Password = HashPassword(user.Password);
+                db.Users.Add(user);
+                db.SaveChanges();
                 return RedirectToAction("", "User");
             }
             return RedirectToAction("", "Home");
@@ -73,20 +71,17 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                using (var ctx = new CompSpyContext())
-                {
-                    var employee = (from user in ctx.Users
-                                    where user.UserID == id
-                                    select new EditUserViewModel()
-                                    {
-                                        UserID = user.UserID,
-                                        Login = user.Login,
-                                        FirstName = user.FirstName,
-                                        LastName = user.LastName,
-                                        IsAdmin = user.IsAdmin
-                                    }).FirstOrDefault();
-                    return View(employee);
-                }
+                var employee = (from user in db.Users
+                                where user.UserID == id
+                                select new EditUserViewModel()
+                                {
+                                    UserID = user.UserID,
+                                    Login = user.Login,
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName,
+                                    IsAdmin = user.IsAdmin
+                                }).FirstOrDefault();
+                return View(employee);
             }
             return RedirectToAction("", "Home");
         }
@@ -101,33 +96,30 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                using (var ctx = new CompSpyContext())
+                var userToEdit = (from u in db.Users
+                                    where u.UserID == user.UserID
+                                    select u).FirstOrDefault();
+                userToEdit.Login = user.Login;
+                userToEdit.FirstName = user.FirstName;
+                userToEdit.LastName = user.LastName;
+                userToEdit.IsAdmin = user.IsAdmin;
+
+                if (user.Password != null)
                 {
-                    var userToEdit = (from u in ctx.Users
-                                     where u.UserID == user.UserID
-                                     select u).FirstOrDefault();
-                    userToEdit.Login = user.Login;
-                    userToEdit.FirstName = user.FirstName;
-                    userToEdit.LastName = user.LastName;
-                    userToEdit.IsAdmin = user.IsAdmin;
-
-                    if (user.Password != null)
+                    if (user.Password == user.ConfirmPassword)
                     {
-                        if (user.Password == user.ConfirmPassword)
-                        {
-                            userToEdit.Password = HashPassword(user.Password);
-                        } else
-                        {
-                            user.Password = user.ConfirmPassword = "";
-                            ModelState.AddModelError("", "Podane hasła nie zgadzają się");
-                            return View(user);
-                        }
+                        userToEdit.Password = HashPassword(user.Password);
+                    } else
+                    {
+                        user.Password = user.ConfirmPassword = "";
+                        ModelState.AddModelError("", "Podane hasła nie zgadzają się");
+                        return View(user);
                     }
-
-                    userToEdit.LastEdit = DateTime.Now;
-                    userToEdit.EditorID = (int)Session["UserID"];
-                    ctx.SaveChanges();
                 }
+
+                userToEdit.LastEdit = DateTime.Now;
+                userToEdit.EditorID = (int)Session["UserID"];
+                db.SaveChanges();
                 return RedirectToAction("", "User");
             }
             return RedirectToAction("", "Home");
@@ -136,11 +128,8 @@ namespace CompSpyWeb.Controllers
         private bool CheckUserPermission()
         {
             int uid = (int)Session["UserID"];
-            using (var ctx = new CompSpyContext())
-            {
-                var us = ctx.Users.Where(u => u.UserID == uid).FirstOrDefault();
-                return us.IsAdmin;
-            }
+            var us = db.Users.Where(u => u.UserID == uid).FirstOrDefault();
+            return us.IsAdmin;
         }
 
         private string HashPassword(string plainPassword)
@@ -151,6 +140,15 @@ namespace CompSpyWeb.Controllers
                 byte[] hashPass = sha256.ComputeHash(pass);
                 return BitConverter.ToString(hashPass).Replace("-", string.Empty);
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
