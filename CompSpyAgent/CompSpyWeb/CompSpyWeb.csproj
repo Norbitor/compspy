@@ -184,6 +184,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Hubs\ComputerHub.cs" />
+    <Compile Include="Controllers\StationController.cs" />
+    <Compile Include="Controllers\SuirvelanceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\CompSpyContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -200,6 +202,10 @@
     <Compile Include="Migrations\201705191209431_AddComputerConnectionMark.cs" />
     <Compile Include="Migrations\201705191209431_AddComputerConnectionMark.Designer.cs">
       <DependentUpon>201705191209431_AddComputerConnectionMark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705191831570_ForeignKeyFix.cs" />
+    <Compile Include="Migrations\201705191831570_ForeignKeyFix.Designer.cs">
+      <DependentUpon>201705191831570_ForeignKeyFix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Computer.cs" />
@@ -270,6 +276,9 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\New.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\Station\Index.cshtml" />
+    <Content Include="Views\Suirvelance\Index.cshtml" />
+    <Content Include="Views\Station\ComputerList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -289,6 +298,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705191209431_AddComputerConnectionMark.resx">
       <DependentUpon>201705191209431_AddComputerConnectionMark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191831570_ForeignKeyFix.resx">
+      <DependentUpon>201705191831570_ForeignKeyFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

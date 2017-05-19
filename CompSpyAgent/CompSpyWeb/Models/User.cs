@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -49,7 +50,10 @@ namespace CompSpyWeb.Models
 
         public int? EditorID { get; set; }
 
+        [ForeignKey("CreatorID")]
         public virtual User Creator { get; set; }
+
+        [ForeignKey("EditorID")]
         public virtual User Editor { get; set; }
     }
 }
