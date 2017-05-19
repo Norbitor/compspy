@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Zarządzanie stanowiskami";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Zarządzanie stanowiskami</h1>
+        <p>
+            Ta sekcja umożliwia zarządzanie pomieszczeniami z komputerami oraz definiowane i przypisywanie
+            komputerów do pomieszczeń.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Pomieszczenia</h2>
+        <p>
+            Tutaj możesz dodać pomieszczenia lub obszary. Dodatkowo możesz przypisać użytkowników,
+            którzy powinnni mieć uprawnienia do poszczególnych sal.
+        </p>
+        <p>@Html.ActionLink("Pomieszczenia »", "Index", "Classrooms", null, new { @class = "btn btn-default" })</p>
+    </div>
+    <div class="col-md-6">
+        <h2>Komputery</h2>
+        <p>
+            Zarządzaj komputerami w systemie. Możesz tutaj dodać nowe komputery do aplikacji,
+            edytować istniejące lub usuwać maszyny, które nie są już używane.
+        </p>
+        <p>@Html.ActionLink("Komputery »", "Index", "Computers", null, new { @class = "btn btn-default" })</p>
+    </div>
+</div>

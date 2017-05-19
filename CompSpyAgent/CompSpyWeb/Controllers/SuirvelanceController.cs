@@ -6,19 +6,10 @@ using System.Web.Mvc;
 
 namespace CompSpyWeb.Controllers
 {
-    public class HomeController : Controller
+    public class SuirvelanceController : Controller
     {
+        // GET: Suirvelance
         public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            return View();
-        }
-
-        public ActionResult Stations()
         {
             return View();
         }

@@ -5,41 +5,29 @@
 
 <h2>@ViewBag.Title</h2>
 
-<table class="table va-middle-table">
-    <thead>
+<table class="table">
+    <tr>
+        <th>Login</th>
+        <th>Imię i nazwisko</th>
+        <th>Administrator</th>
+        <th>Ostatnie logowanie</th>
+        <th>Operacje</th>
+    </tr>
+
+    @foreach (var user in Model)
+    {
         <tr>
-            <th>#</th>
-            <th>Login</th>
-            <th>Imię i nazwisko</th>
-            <th>Administrator</th>
-            <th>Ostatnie logowanie</th>
-            <th>Operacje</th>
+            <td>@user.Login</td>
+            <td>@user.FirstName @user.LastName</td>
+            <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
+            <td>@user.LastLogin</td>
+            <td>
+                @Html.ActionLink("Edytuj", "Edit", "User", new { id = @user.UserID }, new { @class = "btn btn-primary" })
+                <a href="#" data-toggle="modal" data-target="#delConfirmDialog" class="btn btn-danger delopt" data-id="@user.UserID">Usuń</a>
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>@user.Login</td>
-                <td>@user.FirstName @user.LastName</td>
-                <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
-                <td>@user.LastLogin</td>
-                <td>
-                    @Html.ActionLink("Edytuj", "Edit", "User", new { id = @user.UserID }, new { @class = "btn btn-primary" })
-                    <div class="dropdown dropdown-ib">
-                        <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
-                            Operacje
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-white">
-                            <li><a href="#" data-toggle="modal" data-target="#delConfirmDialog" class="delopt" data-id="@user.UserID">Usuń</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
+    }
+
 </table>
 
 <!-- Modal HTML -->

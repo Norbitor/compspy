@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CompSpyWeb.Models.Computer>
+
+@{
+    ViewBag.Title = "Lista komputerów";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+        <th>Identyfikator stacji</th>
+        <th>Adres IP</th>
+        <th>Pomieszczenie</th>
+        <th>Połączony</th>
+        <th>Data utworzenia</th>
+        <th>Utworzył</th>
+        <th>Data ostatniej edycji</th>
+        <th>Edytował</th>
+        <th>Operacje</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StationDiscriminant)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IPAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Classroom.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsConnected)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Creator.Login)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastEdit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Editor.Login)
+        </td>
+        <td>
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ID }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Dodaj komputer", "Create", null, new { @class = "btn btn-primary" })
+</p>

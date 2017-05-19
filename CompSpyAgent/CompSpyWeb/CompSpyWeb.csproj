@@ -182,9 +182,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClassroomsController.cs" />
+    <Compile Include="Controllers\ComputersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Hubs\ComputerHub.cs" />
-    <Compile Include="Controllers\StationController.cs" />
     <Compile Include="Controllers\SuirvelanceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\CompSpyContext.cs" />
@@ -276,9 +277,14 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\New.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\Station\Index.cshtml" />
     <Content Include="Views\Suirvelance\Index.cshtml" />
-    <Content Include="Views\Station\ComputerList.cshtml" />
+    <Content Include="Views\Classrooms\Create.cshtml" />
+    <Content Include="Views\Classrooms\Edit.cshtml" />
+    <Content Include="Views\Classrooms\Index.cshtml" />
+    <Content Include="Views\Computers\Create.cshtml" />
+    <Content Include="Views\Computers\Edit.cshtml" />
+    <Content Include="Views\Computers\Index.cshtml" />
+    <Content Include="Views\Home\Stations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
