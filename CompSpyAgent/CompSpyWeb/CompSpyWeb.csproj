@@ -34,6 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -181,6 +183,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Hubs\ComputerHub.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\CompSpyContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -194,13 +197,17 @@
     <Compile Include="Migrations\201705151714501_AddDisplayNames.Designer.cs">
       <DependentUpon>201705151714501_AddDisplayNames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705191209431_AddComputerConnectionMark.cs" />
+    <Compile Include="Migrations\201705191209431_AddComputerConnectionMark.Designer.cs">
+      <DependentUpon>201705191209431_AddComputerConnectionMark.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Classroom.cs" />
     <Compile Include="Models\ClassroomPermission.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="App_Start\Startup.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\EditUserViewModel.cs" />
   </ItemGroup>
@@ -279,6 +286,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705151714501_AddDisplayNames.resx">
       <DependentUpon>201705151714501_AddDisplayNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191209431_AddComputerConnectionMark.resx">
+      <DependentUpon>201705191209431_AddComputerConnectionMark.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

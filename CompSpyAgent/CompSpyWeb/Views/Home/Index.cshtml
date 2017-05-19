@@ -21,7 +21,7 @@
     <div class="col-md-4">
         <h2>Zarządzanie stanowiskami</h2>
         <p>Skonfiguruj monitoring komputerów oraz pogrupuj je w pomieszczenia.</p>
-        <p><a class="btn btn-default" href="#">Stanowiska &raquo;</a></p>
+        <p><a class="btn btn-default" href="#" id="sendmessage">Stanowiska &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Użytkownicy i uprawnienia</h2>
@@ -29,3 +29,20 @@
         <p>@Html.ActionLink("Użytkownicy »", "Index", "User", null, new { @class = "btn btn-default" })</p>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            var foo = $.connection.computerHub;
+
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    foo.server.broadcastMessage("Działa dobrze!\nРаботает хорошо!\n效果很好!");
+                });
+            });
+        })
+    </script>
+}

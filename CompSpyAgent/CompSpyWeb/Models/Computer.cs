@@ -18,6 +18,8 @@ namespace CompSpyWeb.Models
         [DisplayName("Oznaczenie komputera")]
         public string StationDiscriminant { get; set; }
 
+        public bool IsConnected { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public int CreatorID { get; set; }

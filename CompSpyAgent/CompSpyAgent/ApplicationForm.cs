@@ -13,15 +13,16 @@ namespace CompSpyAgent
 {
     public partial class ApplicationForm : Form
     {
+        ServerHandler srvhan;
+
         public ApplicationForm()
         {
             InitializeComponent();
             this.Icon = Resources.AppIcon;
             ConfigureTray();
 
-            trayIcon.BalloonTipTitle = "CompSpy Agent 1.0";
-            trayIcon.BalloonTipText = "Agent started. Waiting for Server...";
-            trayIcon.ShowBalloonTip(500);
+            srvhan = new ServerHandler("http://{txbServerIP}", trayIcon);
+            srvhan.StartListening();
         }
 
         private void ConfigureTray()
