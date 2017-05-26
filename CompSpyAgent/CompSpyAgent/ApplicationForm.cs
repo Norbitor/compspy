@@ -96,5 +96,10 @@ namespace CompSpyAgent
 
 
         }
+
+        private void ApplicationForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            srvhan.CloseConnection();
+        }
     }
 }

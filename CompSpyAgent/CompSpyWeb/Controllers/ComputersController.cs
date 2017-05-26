@@ -98,7 +98,40 @@ namespace CompSpyWeb.Controllers
         [HttpPost]
         public ActionResult Connect(string stationId, string secret)
         {
-            return Content("SUCCESS: " + stationId + " " + secret);
+            var comp = (from c in db.Computers
+                       where c.StationDiscriminant == stationId
+                       select c).FirstOrDefault();
+
+            if (comp != null)
+            {
+                comp.IsConnected = true;
+                db.Entry(comp).State = EntityState.Modified;
+                db.SaveChanges();
+                return Content("SUCCESS");
+            } else
+            {
+                return Content("FAIL Computer is not authorized!");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Disconnect(string stationId, string secret)
+        {
+            var comp = (from c in db.Computers
+                       where c.StationDiscriminant == stationId
+                       select c).FirstOrDefault();
+
+            if (comp != null)
+            {
+                comp.IsConnected = false;
+                db.Entry(comp).State = EntityState.Modified;
+                db.SaveChanges();
+                return Content("SUCCESS");
+            }
+            else
+            {
+                return Content("FAIL Computer is not authorized!");
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -98,7 +98,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(13, 124);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(107, 32);
             this.button1.TabIndex = 5;
@@ -142,6 +142,7 @@
             this.ShowInTaskbar = false;
             this.Text = "CompSpy Agent";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ApplicationForm_FormClosed);
             this.Resize += new System.EventHandler(this.ApplicationForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();

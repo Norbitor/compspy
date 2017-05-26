@@ -15,18 +15,20 @@ namespace CompSpyAgent
         private HubConnection hubConnection;
         private IHubProxy computerHub;
         private ApplicationForm appForm;
+        private string hubAddr;
 
         public ServerHandler(string hubAddr, ApplicationForm appForm)
         {
-            EstablishConnection(hubAddr);
+            this.hubAddr = hubAddr;
+            this.appForm = appForm;
 
+            EstablishConnection();
             hubConnection = new HubConnection(hubAddr);
             computerHub = hubConnection.CreateHubProxy("ComputerHub");
             ConfigureRPCHandlers();
-            this.appForm = appForm;
         }
 
-        private async void EstablishConnection(string hubAddr)
+        private async void EstablishConnection()
         {
             var parameters = new Dictionary<string, string>
             {
@@ -48,6 +50,16 @@ namespace CompSpyAgent
             }
         }
 
+        public async void CloseConnection()
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "stationId", "PC1" },
+                { "secret", "fafafa" }
+            };
+            var content = new FormUrlEncodedContent(parameters);
+            var response = await client.PostAsync(hubAddr + "/Computers/Disconnect", content);
+        }
 
         private void ConfigureRPCHandlers()
         {
@@ -61,6 +73,5 @@ namespace CompSpyAgent
         {
             hubConnection.Start().Wait();
         }
-
     }
 }
