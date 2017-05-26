@@ -285,6 +285,7 @@
     <Content Include="Views\Computers\Edit.cshtml" />
     <Content Include="Views\Computers\Index.cshtml" />
     <Content Include="Views\Home\Stations.cshtml" />
+    <Content Include="Views\Suirvelance\ShowRoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

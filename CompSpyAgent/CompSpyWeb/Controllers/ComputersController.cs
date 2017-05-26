@@ -95,6 +95,12 @@ namespace CompSpyWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult Connect(string stationId, string secret)
+        {
+            return Content("SUCCESS: " + stationId + " " + secret);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

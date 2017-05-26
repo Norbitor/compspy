@@ -13,16 +13,40 @@ namespace CompSpyAgent
 {
     public partial class ApplicationForm : Form
     {
-        ServerHandler srvhan;
+        private ServerHandler srvhan;
 
         public ApplicationForm()
         {
             InitializeComponent();
             this.Icon = Resources.AppIcon;
             ConfigureTray();
+            EstablishConnection();            
+        }
 
-            srvhan = new ServerHandler("http://{txbServerIP}", trayIcon);
-            srvhan.StartListening();
+        public void ShowTrayMessage(string msg)
+        {
+            trayIcon.BalloonTipTitle = "CompSpy Agent 1.0";
+            trayIcon.BalloonTipText = msg;
+            trayIcon.ShowBalloonTip(500);
+        }
+
+        public void SetConnectionStateLabel(string msg)
+        {
+            lblStatus.Text = msg;
+        }
+
+        private void EstablishConnection()
+        {
+            try
+            {
+                srvhan = new ServerHandler("http://" + txbServerIP.Text, this);
+                srvhan.StartListening();
+            }
+            catch (ServerConnectionException ex)
+            {
+                Console.Error.WriteLine("Received following response from server, which was unexpected!\n"
+                    + ex.Message);
+            }
         }
 
         private void ConfigureTray()
@@ -63,11 +87,6 @@ namespace CompSpyAgent
             Show();
             WindowState = FormWindowState.Normal;
             ShowInTaskbar = true;
-        }
-
-        private void txbServerIP_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
