@@ -4,6 +4,7 @@ using CompSpyWeb.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -123,6 +124,39 @@ namespace CompSpyWeb.Controllers
                 return RedirectToAction("", "User");
             }
             return RedirectToAction("", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult Permissions(int id)
+        {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (!CheckUserPermission())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Nie masz uprawnień do tego zasobu.");
+            }
+
+            var data = (from u in db.Users
+                       where u.UserID == id
+                       join p in db.ClassroomPermissions on u.UserID equals p.UserID
+                       join c in db.Classrooms on p.ClassroomID equals c.ID into cr
+                       select new UserPermissionsViewModel()
+                       {
+                           UserID = u.UserID,
+                           Login = u.Login,
+                           FirstName = u.FirstName,
+                           LastName = u.LastName,
+                           ClassroomsWithPermissions = cr.ToList()
+                       }).FirstOrDefault();
+            if(data == null)
+            {
+                return HttpNotFound("Uzytkownik o podanym ID nie zostal odnaleziony.");
+            }
+
+            data.AllClassrooms = db.Classrooms.ToList();
+            return View(data);
         }
 
         private bool CheckUserPermission()

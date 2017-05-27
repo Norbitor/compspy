@@ -1,0 +1,30 @@
+﻿@model CompSpyWeb.ViewModels.UserPermissionsViewModel
+@{
+    ViewBag.Title = "Uprawnienia użytkownika: " + Model.FirstName + " " + Model.LastName
+        + " (" + Model.Login + ")";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.UserID)
+    @Html.HiddenFor(model => model.Login)
+    @Html.HiddenFor(model => model.FirstName)
+    @Html.HiddenFor(model => model.LastName)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ClassroomsWithPermissions, "Uprawnienia do sal")<br />
+        <em>Użytkownik posiada dostęp do zaznaczonych sal.</em><br/>
+        @Html.ListBoxFor(model => model.ClassroomsWithPermissions,
+        new MultiSelectList(Model.AllClassrooms, "ID", "Name", Model.ClassroomsWithPermissions.Select(t => t.ID)))
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}

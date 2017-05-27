@@ -217,6 +217,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\EditUserViewModel.cs" />
+    <Compile Include="ViewModels\UserPermissionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -286,6 +287,7 @@
     <Content Include="Views\Computers\Index.cshtml" />
     <Content Include="Views\Home\Stations.cshtml" />
     <Content Include="Views\Suirvelance\ShowRoom.cshtml" />
+    <Content Include="Views\User\Permissions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
