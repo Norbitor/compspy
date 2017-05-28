@@ -5,26 +5,42 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.UserID)
+        @Html.HiddenFor(model => model.Login)
+        @Html.HiddenFor(model => model.FirstName)
+        @Html.HiddenFor(model => model.LastName)
 
-    @Html.HiddenFor(model => model.UserID)
-    @Html.HiddenFor(model => model.Login)
-    @Html.HiddenFor(model => model.FirstName)
-    @Html.HiddenFor(model => model.LastName)
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ClassroomsWithPermissions, "Uprawnienia do sal")<br />
-        <em>Użytkownik posiada dostęp do zaznaczonych sal.</em><br/>
-        @Html.ListBoxFor(model => model.ClassroomsWithPermissions,
-        new MultiSelectList(Model.AllClassrooms, "ID", "Name", Model.ClassroomsWithPermissions.Select(t => t.ID)))
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ClassroomsWithPermissions, "Uprawnienia do sal")<br />
+            <em>Użytkownik posiada dostęp do zaznaczonych sal.</em><br />
+            <div class="col-md-10">
+                <select id="ClassroomsWithPermissions" multiple="multiple" name="ClassroomsWithPermissions"
+                        size="10" style="width: 200px">
+                    @foreach (var cr in Model.AllClassrooms)
+                {
+                    if (Model.ClassroomsWithPermissions.Any(x => x.ID == cr.ID))
+                    {
+                            <option value="@cr.ID" selected="selected">@cr.Name @@ @cr.Location</option>
+                        }
+                        else
+                        {
+                            <option value="@cr.ID">@cr.Name @@ @cr.Location</option>
+                        }
+                    }
+                </select>
+            </div>
         </div>
-    </div>
-}
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Zapisz" class="btn btn-primary" />
+                @Html.ActionLink("Anuluj", "Index", "User", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>

@@ -140,8 +140,9 @@ namespace CompSpyWeb.Controllers
 
             var data = (from u in db.Users
                        where u.UserID == id
-                       join p in db.ClassroomPermissions on u.UserID equals p.UserID
-                       join c in db.Classrooms on p.ClassroomID equals c.ID into cr
+                       join p in db.ClassroomPermissions on u.UserID equals p.UserID into perms
+                       from perm in perms.DefaultIfEmpty()
+                       join c in db.Classrooms on perm.ClassroomID equals c.ID into cr
                        select new UserPermissionsViewModel()
                        {
                            UserID = u.UserID,

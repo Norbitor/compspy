@@ -23,6 +23,7 @@
             <td>@user.LastLogin</td>
             <td>
                 @Html.ActionLink("Edytuj", "Edit", "User", new { id = @user.UserID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Uprawnienia", "Permissions", "User", new { id=@user.UserID }, new { @class = "btn btn-info" })
                 <a href="#" data-toggle="modal" data-target="#delConfirmDialog" class="btn btn-danger delopt" data-id="@user.UserID">Usuń</a>
             </td>
         </tr>
