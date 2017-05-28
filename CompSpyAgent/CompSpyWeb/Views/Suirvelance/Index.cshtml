@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CompSpyWeb.Models.Classroom>
+﻿@model IEnumerable<CompSpyWeb.ViewModels.ClassroomViewModel>
 @{
     ViewBag.Title = "Rozpocznij monitoring";
 }
@@ -12,8 +12,8 @@
             <h3>@m.Name</h3>
             <p>
                 Lokalizacja: @m.Location<br />
-                Liczba komputerów: soon<br />
-                Aktywne komputery: soon
+                Liczba komputerów: @m.ComputersCount<br />
+                Aktywne komputery: @m.ActiveComputers
             </p>
             @Html.ActionLink("Monitoruj", "ShowRoom", "Suirvelance", new { id = @m.ID }, new { @class = "btn btn-primary"})
         </div>

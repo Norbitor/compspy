@@ -1,5 +1,6 @@
 ﻿using CompSpyWeb.DAL;
 using CompSpyWeb.Models;
+using CompSpyWeb.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,18 +20,24 @@ namespace CompSpyWeb.Controllers
             {
                 return RedirectToAction("", "Home");
             }
-            ICollection<Classroom> classrooms;
+            ICollection<ClassroomViewModel> classrooms;
             if (CheckUserPermission())
             {
-                classrooms = db.Classrooms.ToList();
+                classrooms = PopulateClassroomList(null);
             }
             else
             {
-                int uid = (int)Session["UserID"];
-                classrooms = (from c in db.Classrooms
-                             join cp in db.ClassroomPermissions on c.ID equals cp.ClassroomID
-                             where cp.UserID == uid
-                             select c).ToList();
+                classrooms = PopulateClassroomList((int)Session["UserID"]);
+
+                //int uid = (int)Session["UserID"];
+                //classrooms = (from c in db.Classrooms
+                //             join cp in db.ClassroomPermissions on c.ID equals cp.ClassroomID
+                //             where cp.UserID == uid
+                //             select new ClassroomViewModel()
+                //             {
+                //                 Name = c.Name,
+                //                 Location = c.Location
+                //             }).ToList();
             }
 
             return View(classrooms);
@@ -46,6 +53,40 @@ namespace CompSpyWeb.Controllers
         public ActionResult ShowComputer(int id)
         {
             return View();
+        }
+
+        private ICollection<ClassroomViewModel> PopulateClassroomList(int? userid)
+        {
+            ICollection<ClassroomViewModel> classrooms;
+            if (userid == null)
+            {
+                classrooms = (from classroom in db.Classrooms
+                              join computer in db.Computers on classroom.ID equals computer.ClassroomID into computers
+                              select new ClassroomViewModel()
+                              {
+                                  ID = classroom.ID,
+                                  Name = classroom.Name,
+                                  Location = classroom.Location,
+                                  ComputersCount = computers.Count(),
+                                  ActiveComputers = computers.Where(x => x.IsConnected).Count()
+                              }).ToList();
+            }
+            else
+            {
+                classrooms = (from classroom in db.Classrooms
+                              join cperm in db.ClassroomPermissions on classroom.ID equals cperm.ClassroomID
+                              join computer in db.Computers on classroom.ID equals computer.ClassroomID into computers
+                              where cperm.UserID == userid
+                              select new ClassroomViewModel()
+                              {
+                                  ID = classroom.ID,
+                                  Name = classroom.Name,
+                                  Location = classroom.Location,
+                                  ComputersCount = computers.Count(),
+                                  ActiveComputers = computers.Where(x => x.IsConnected).Count()
+                              }).ToList();
+            }
+            return classrooms;
         }
 
         private bool CheckUserPermission()
