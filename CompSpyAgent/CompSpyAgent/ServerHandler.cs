@@ -42,6 +42,7 @@ namespace CompSpyAgent
             {
                 appForm.ShowTrayMessage("Connection to server established");
                 appForm.SetConnectionStateLabel("Connected");
+                await computerHub.Invoke("Connect", "PC1");
             } else
             {
                 appForm.ShowTrayMessage("Connection to server failed");
@@ -59,6 +60,7 @@ namespace CompSpyAgent
             };
             var content = new FormUrlEncodedContent(parameters);
             var response = await client.PostAsync(hubAddr + "/Computers/Disconnect", content);
+            await computerHub.Invoke("Disconnect", "PC1");
         }
 
         private void ConfigureRPCHandlers()

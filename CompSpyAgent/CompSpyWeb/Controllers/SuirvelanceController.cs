@@ -28,16 +28,6 @@ namespace CompSpyWeb.Controllers
             else
             {
                 classrooms = PopulateClassroomList((int)Session["UserID"]);
-
-                //int uid = (int)Session["UserID"];
-                //classrooms = (from c in db.Classrooms
-                //             join cp in db.ClassroomPermissions on c.ID equals cp.ClassroomID
-                //             where cp.UserID == uid
-                //             select new ClassroomViewModel()
-                //             {
-                //                 Name = c.Name,
-                //                 Location = c.Location
-                //             }).ToList();
             }
 
             return View(classrooms);
@@ -46,12 +36,30 @@ namespace CompSpyWeb.Controllers
         // GET: Suirvelance/ShowRoom/4
         public ActionResult ShowRoom(int id)
         {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            var classroom = db.Classrooms.Find(id);
+            if (classroom == null)
+            {
+                return HttpNotFound("Nie znaleziono sali o zadanym ID.");
+            }
             return View();
         }
 
         // GET: Suirvelance/ShowComputer/34
         public ActionResult ShowComputer(int id)
         {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            var computer = db.Computers.Find(id);
+            if (computer == null || !computer.IsConnected)
+            {
+                return HttpNotFound("Nie znaleziono komputera o zadanym ID lub komputer nie jest wlaczony.");
+            }
             return View();
         }
 

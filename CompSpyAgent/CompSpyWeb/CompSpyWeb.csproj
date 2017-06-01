@@ -186,6 +186,7 @@
     <Compile Include="Controllers\ComputersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Hubs\ComputerHub.cs" />
+    <Compile Include="Controllers\Hubs\SuirvelanceHub.cs" />
     <Compile Include="Controllers\SuirvelanceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\CompSpyContext.cs" />
@@ -290,6 +291,7 @@
     <Content Include="Views\Home\Stations.cshtml" />
     <Content Include="Views\Suirvelance\ShowRoom.cshtml" />
     <Content Include="Views\User\Permissions.cshtml" />
+    <Content Include="Views\Suirvelance\ShowComputer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
