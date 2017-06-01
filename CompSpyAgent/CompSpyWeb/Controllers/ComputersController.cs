@@ -18,15 +18,35 @@ namespace CompSpyWeb.Controllers
         // GET: Computers
         public ActionResult Index()
         {
-            var computers = db.Computers.Include(c => c.Classroom).Include(c => c.Creator).Include(c => c.Editor);
-            return View(computers.ToList());
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                var computers = db.Computers.Include(c => c.Classroom).Include(c => c.Creator).Include(c => c.Editor);
+                return View(computers.ToList());
+            }
+            return RedirectToAction("", "Home");
+            
         }
 
+
         // GET: Computers/Create
+        [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name");
-            return View();
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name");
+                return View();
+            }
+            return RedirectToAction("", "Home");
+            
         }
 
         // POST: Computers/Create
@@ -34,33 +54,54 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,ClassroomID,IPAddress,StationDiscriminant")] Computer computer)
         {
-            if (ModelState.IsValid)
+            if (Session["UserID"] == null)
             {
-                computer.CreatorID = (int)Session["UserID"];
-                computer.CreatedOn = DateTime.Now;
-                db.Computers.Add(computer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("", "Home");
             }
+            if (CheckUserPermission())
+            {
+                if (ModelState.IsValid)
+                {
+                    computer.CreatorID = (int)Session["UserID"];
+                    computer.CreatedOn = DateTime.Now;
+                    db.Computers.Add(computer);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
 
-            ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
-            return View(computer);
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
+                return View(computer);
+            }
+            return RedirectToAction("", "Home");
+
+            
         }
 
         // GET: Computers/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (Session["UserID"] == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("", "Home");
             }
-            Computer computer = db.Computers.Find(id);
-            if (computer == null)
+            if (CheckUserPermission())
             {
-                return HttpNotFound();
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Computer computer = db.Computers.Find(id);
+                if (computer == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
+                return View(computer);
             }
-            ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
-            return View(computer);
+            return RedirectToAction("", "Home");
+
+            
         }
 
         // POST: Computers/Edit/5
@@ -68,20 +109,30 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,ClassroomID,IPAddress,StationDiscriminant")] Computer computer)
         {
-            var computerToEdit = db.Computers.Find(computer.ID);
-            if (ModelState.IsValid)
+            if (Session["UserID"] == null)
             {
-                computerToEdit.ClassroomID = computer.ClassroomID;
-                computerToEdit.IPAddress = computer.IPAddress;
-                computerToEdit.StationDiscriminant = computer.StationDiscriminant;
-                computerToEdit.EditorID = (int)Session["UserID"];
-                computerToEdit.lastEdit = DateTime.Now;
-                db.Entry(computerToEdit).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("", "Home");
             }
-            ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computerToEdit.ClassroomID);
-            return View(computerToEdit);
+            if (CheckUserPermission())
+            {
+                var computerToEdit = db.Computers.Find(computer.ID);
+                if (ModelState.IsValid)
+                {
+                    computerToEdit.ClassroomID = computer.ClassroomID;
+                    computerToEdit.IPAddress = computer.IPAddress;
+                    computerToEdit.StationDiscriminant = computer.StationDiscriminant;
+                    computerToEdit.EditorID = (int)Session["UserID"];
+                    computerToEdit.lastEdit = DateTime.Now;
+                    db.Entry(computerToEdit).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computerToEdit.ClassroomID);
+                return View(computerToEdit);
+            }
+            return RedirectToAction("", "Home");
+
+            
         }
 
         // POST: Computers/Delete/5
@@ -89,18 +140,27 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Computer computer = db.Computers.Find(id);
-            db.Computers.Remove(computer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                Computer computer = db.Computers.Find(id);
+                db.Computers.Remove(computer);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("", "Home");
+            
         }
 
         [HttpPost]
         public ActionResult Connect(string stationId, string secret)
         {
             var comp = (from c in db.Computers
-                       where c.StationDiscriminant == stationId
-                       select c).FirstOrDefault();
+                        where c.StationDiscriminant == stationId
+                        select c).FirstOrDefault();
 
             if (comp != null)
             {
@@ -108,18 +168,22 @@ namespace CompSpyWeb.Controllers
                 db.Entry(comp).State = EntityState.Modified;
                 db.SaveChanges();
                 return Content("SUCCESS");
-            } else
+            }
+            else
             {
                 return Content("FAIL Computer is not authorized!");
             }
+           
+
+            
         }
 
         [HttpPost]
         public ActionResult Disconnect(string stationId, string secret)
         {
             var comp = (from c in db.Computers
-                       where c.StationDiscriminant == stationId
-                       select c).FirstOrDefault();
+                        where c.StationDiscriminant == stationId
+                        select c).FirstOrDefault();
 
             if (comp != null)
             {
@@ -132,6 +196,15 @@ namespace CompSpyWeb.Controllers
             {
                 return Content("FAIL Computer is not authorized!");
             }
+
+
+        }
+
+        private bool CheckUserPermission()
+        {
+            int uid = (int)Session["UserID"];
+            var us = db.Users.Where(u => u.UserID == uid).FirstOrDefault();
+            return us.IsAdmin;
         }
 
         protected override void Dispose(bool disposing)

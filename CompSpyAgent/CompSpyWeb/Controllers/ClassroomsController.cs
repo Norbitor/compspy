@@ -18,14 +18,32 @@ namespace CompSpyWeb.Controllers
         // GET: Classrooms
         public ActionResult Index()
         {
-            var classrooms = db.Classrooms.Include(c => c.Creator).Include(c => c.Editor);
-            return View(classrooms.ToList());
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                var classrooms = db.Classrooms.Include(c => c.Creator).Include(c => c.Editor);
+                return View(classrooms.ToList());
+            }
+            return RedirectToAction("", "Home");
+            
         }
 
         // GET: Classrooms/Create
         public ActionResult Create()
         {
-            return View();
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                return View();
+            }
+            return RedirectToAction("", "Home");
+            
         }
 
         // POST: Classrooms/Create
@@ -33,31 +51,51 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Name,Location")] Classroom classroom)
         {
-            if (ModelState.IsValid)
+            if (Session["UserID"] == null)
             {
-                classroom.CreatorID = (int)Session["UserID"];
-                classroom.CreatedOn = DateTime.Now;
-                db.Classrooms.Add(classroom);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("", "Home");
             }
+            if (CheckUserPermission())
+            {
+                if (ModelState.IsValid)
+                {
+                    classroom.CreatorID = (int)Session["UserID"];
+                    classroom.CreatedOn = DateTime.Now;
+                    db.Classrooms.Add(classroom);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             
-            return View(classroom);
+                return View(classroom);
+            }
+            return RedirectToAction("", "Home");
+
+            
         }
 
         // GET: Classrooms/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (Session["UserID"] == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("", "Home");
             }
-            Classroom classroom = db.Classrooms.Find(id);
-            if (classroom == null)
+            if (CheckUserPermission())
             {
-                return HttpNotFound();
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Classroom classroom = db.Classrooms.Find(id);
+                if (classroom == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(classroom);
             }
-            return View(classroom);
+            return RedirectToAction("", "Home");
+
+            
         }
 
         // POST: Classrooms/Edit/5
@@ -65,18 +103,28 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Name,Location")] Classroom classroom)
         {
-            var classroomToEdit = db.Classrooms.Find(classroom.ID);
-            if (ModelState.IsValid && classroomToEdit != null)
+            if (Session["UserID"] == null)
             {
-                classroomToEdit.Name = classroom.Name;
-                classroomToEdit.Location = classroom.Location;
-                classroomToEdit.EditorID = (int)Session["UserID"];
-                classroomToEdit.LastEdit = DateTime.Now;
-                db.Entry(classroomToEdit).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("", "Home");
             }
-            return View(classroomToEdit);
+            if (CheckUserPermission())
+            {
+                var classroomToEdit = db.Classrooms.Find(classroom.ID);
+                if (ModelState.IsValid && classroomToEdit != null)
+                {
+                    classroomToEdit.Name = classroom.Name;
+                    classroomToEdit.Location = classroom.Location;
+                    classroomToEdit.EditorID = (int)Session["UserID"];
+                    classroomToEdit.LastEdit = DateTime.Now;
+                    db.Entry(classroomToEdit).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(classroomToEdit);
+
+            }
+            return RedirectToAction("", "Home");
+
         }
 
         // POST: Classrooms/Delete/5
@@ -84,10 +132,25 @@ namespace CompSpyWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Classroom classroom = db.Classrooms.Find(id);
-            db.Classrooms.Remove(classroom);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (CheckUserPermission())
+            {
+                Classroom classroom = db.Classrooms.Find(id);
+                db.Classrooms.Remove(classroom);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("", "Home");
+        }
+
+        private bool CheckUserPermission()
+        {
+            int uid = (int)Session["UserID"];
+            var us = db.Users.Where(u => u.UserID == uid).FirstOrDefault();
+            return us.IsAdmin;
         }
 
         protected override void Dispose(bool disposing)
