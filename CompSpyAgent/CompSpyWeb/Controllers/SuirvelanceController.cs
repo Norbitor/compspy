@@ -45,7 +45,8 @@ namespace CompSpyWeb.Controllers
             {
                 return HttpNotFound("Nie znaleziono sali o zadanym ID.");
             }
-            return View();
+            var computers = db.Computers.Where(comp => comp.ClassroomID == classroom.ID).ToList();
+            return View(computers);
         }
 
         // GET: Suirvelance/ShowComputer/34
