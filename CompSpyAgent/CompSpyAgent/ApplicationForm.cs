@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace CompSpyAgent
             InitializeComponent();
             this.Icon = Resources.AppIcon;
             ConfigureTray();
+            LoadConfiguration();
             EstablishConnection();            
         }
 
@@ -100,6 +102,12 @@ namespace CompSpyAgent
         private void ApplicationForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             srvhan.CloseConnection();
+        }
+
+        private void LoadConfiguration()
+        {
+            txbServerIP.Text = ConfigurationManager.AppSettings["serverUri"];
+            textBox1.Text = ConfigurationManager.AppSettings["stationDiscr"];
         }
     }
 }
