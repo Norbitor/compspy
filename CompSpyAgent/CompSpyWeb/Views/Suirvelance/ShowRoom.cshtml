@@ -34,8 +34,13 @@
             var hub = $.connection.suirvelanceHub;
 
             $.connection.hub.start().done(function () {
-                hub.server.connect("A1/1");
+                hub.server.connect("@ViewBag.ClassroomName");
             });
+
+            window.onbeforeunload = function (e) {
+                hub.server.disconnect("@ViewBag.ClassroomName");
+                $.connection.hub.stop();
+            }
         });
     </script>
 }

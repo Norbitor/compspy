@@ -12,7 +12,13 @@ namespace CompSpyWeb.Controllers.Hubs
         public void Connect(string classroom)
         {
             var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
-            chub.Clients.Group(classroom).BroadcastMessageReceived("Hello!");
+            chub.Clients.Group(classroom).StartLowQualityTransmission();
+        }
+
+        public void Disconnect(string classroom)
+        {
+            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
+            chub.Clients.Group(classroom).StopLowQualityTransmission();
         }
 
         public interface ISuirvelanceHubModel

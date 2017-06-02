@@ -41,7 +41,7 @@ namespace CompSpyAgent
         {
             try
             {
-                srvhan = new ServerHandler("http://" + txbServerIP.Text, this);
+                srvhan = new ServerHandler(txbServerIP.Text, this);
                 srvhan.StartListening();
             }
             catch (ServerConnectionException ex)
@@ -107,7 +107,7 @@ namespace CompSpyAgent
         private void LoadConfiguration()
         {
             txbServerIP.Text = ConfigurationManager.AppSettings["serverUri"];
-            textBox1.Text = ConfigurationManager.AppSettings["stationDiscr"];
+            stationDiscrTxb.Text = ConfigurationManager.AppSettings["stationDiscr"];
         }
     }
 }

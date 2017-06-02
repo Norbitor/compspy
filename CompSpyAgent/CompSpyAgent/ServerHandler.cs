@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using System.Windows.Forms;
 using System.Net.Http;
+using System.Configuration;
 
 namespace CompSpyAgent
 {
@@ -32,8 +33,8 @@ namespace CompSpyAgent
         {
             var parameters = new Dictionary<string, string>
             {
-                { "stationId", "PC1" },
-                { "secret", "fafafa" }
+                { "stationId", ConfigurationManager.AppSettings["stationDiscr"]},
+                { "secret", ConfigurationManager.AppSettings["secret"] }
             };
             var content = new FormUrlEncodedContent(parameters);
             var response = await client.PostAsync(hubAddr + "/Computers/Connect", content);
@@ -42,7 +43,7 @@ namespace CompSpyAgent
             {
                 appForm.ShowTrayMessage("Connection to server established");
                 appForm.SetConnectionStateLabel("Connected");
-                await computerHub.Invoke("Connect", "PC1");
+                await computerHub.Invoke("Connect", ConfigurationManager.AppSettings["stationDiscr"]);
             } else
             {
                 appForm.ShowTrayMessage("Connection to server failed");
@@ -55,12 +56,12 @@ namespace CompSpyAgent
         {
             var parameters = new Dictionary<string, string>
             {
-                { "stationId", "PC1" },
-                { "secret", "fafafa" }
+                { "stationId", ConfigurationManager.AppSettings["stationDiscr"] },
+                { "secret", ConfigurationManager.AppSettings["secret"] }
             };
             var content = new FormUrlEncodedContent(parameters);
             var response = await client.PostAsync(hubAddr + "/Computers/Disconnect", content);
-            await computerHub.Invoke("Disconnect", "PC1");
+            await computerHub.Invoke("Disconnect", ConfigurationManager.AppSettings["stationDiscr"]);
         }
 
         private void ConfigureRPCHandlers()
@@ -68,6 +69,22 @@ namespace CompSpyAgent
             computerHub.On<string>("BroadcastMessageReceived", x =>
             {
                 appForm.ShowTrayMessage(x);
+            });
+            computerHub.On("StartLowQualityTransmission", () =>
+            {
+                appForm.ShowTrayMessage("odebrano żądanie śledzenia podstawowego");
+            });
+            computerHub.On("StopLowQualityTransmission", () =>
+            {
+                appForm.ShowTrayMessage("odebrano żądanie zakończenia śledzenia podst.");
+            });
+            computerHub.On("StartHighQualityTransmission", () =>
+            {
+                appForm.ShowTrayMessage("odebrano żądanie śledzenia hq");
+            });
+            computerHub.On("StopHighQualityTransmission", () =>
+            {
+                appForm.ShowTrayMessage("odebrano żądanie zakończenia śledzenia hq");
             });
         }
 

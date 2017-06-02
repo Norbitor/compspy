@@ -37,7 +37,7 @@
             this.btnAdministrator = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.stationDiscrTxb = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // trayIcon
@@ -115,20 +115,21 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Station dicr.:";
             // 
-            // textBox1
+            // stationDiscrTxb
             // 
-            this.textBox1.Location = new System.Drawing.Point(112, 64);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(193, 22);
-            this.textBox1.TabIndex = 7;
-            this.textBox1.Text = "PC1";
+            this.stationDiscrTxb.Enabled = false;
+            this.stationDiscrTxb.Location = new System.Drawing.Point(112, 64);
+            this.stationDiscrTxb.Name = "stationDiscrTxb";
+            this.stationDiscrTxb.Size = new System.Drawing.Size(193, 22);
+            this.stationDiscrTxb.TabIndex = 7;
+            this.stationDiscrTxb.Text = "PC1";
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(317, 169);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.stationDiscrTxb);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnAdministrator);
@@ -159,7 +160,7 @@
         private System.Windows.Forms.Button btnAdministrator;
         public System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox stationDiscrTxb;
     }
 }
 
