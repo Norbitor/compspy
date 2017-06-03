@@ -34,11 +34,10 @@
 </div>
 <div class="row" style="margin-top: 15px;">
     <div class="col-md-9">
-        <input type="text" style="max-width: none; display: inline; width: 80%" class="form-control" placeholder="Wiadomość do użytkownika" />
-        <input type="button" value="Wyślij" class="btn btn-success" />
+        <input type="text" id="msg" style="max-width: none; display: inline; width: 80%" class="form-control" placeholder="Wiadomość do użytkownika" />
+        <input type="button" value="Wyślij" class="btn btn-success" id="btn-send-msg" />
         <span id="current-in-length">0</span>/<span id="max-in-length">100</span>
     </div>
-    
 </div>
 
 <p style="margin-top: 15px">
@@ -61,6 +60,11 @@
                 hub.server.disconnectHq("@Model.ConnectionID");
                 $.connection.hub.stop();
             }
+
+            $('#btn-send-msg').click(function (e) {
+                hub.server.sendMessageToClient("@Model.ConnectionID", $('#msg').val());
+                $('#msg').val('');
+            })
         });
     </script>
 }

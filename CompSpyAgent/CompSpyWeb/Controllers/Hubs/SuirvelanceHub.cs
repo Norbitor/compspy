@@ -9,28 +9,41 @@ namespace CompSpyWeb.Controllers.Hubs
 {
     public class SuirvelanceHub : Hub<SuirvelanceHub.ISuirvelanceHubModel>
     {
+        IHubContext<IComputerHubModel> computerHub;
+
+        public SuirvelanceHub()
+        {
+            computerHub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
+        }
+
         public void Connect(string classroom)
         {
-            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
-            chub.Clients.Group(classroom).StartLowQualityTransmission();
+            computerHub.Clients.Group(classroom).StartLowQualityTransmission();
         }
 
         public void Disconnect(string classroom)
         {
-            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
-            chub.Clients.Group(classroom).StopLowQualityTransmission();
+            computerHub.Clients.Group(classroom).StopLowQualityTransmission();
         }
 
         public void ConnectHq(string connectionId)
         {
-            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
-            chub.Clients.Client(connectionId).StartHighQualityTransmission();
+            computerHub.Clients.Client(connectionId).StartHighQualityTransmission();
         }
 
         public void DisconnectHq(string connectionId)
         {
-            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
-            chub.Clients.Client(connectionId).StopHighQualityTransmission();
+            computerHub.Clients.Client(connectionId).StopHighQualityTransmission();
+        }
+
+        public void SendMessageToClassroom(string classroom, string message)
+        {
+            computerHub.Clients.Group(classroom).BroadcastMessageReceived(message);
+        }
+
+        public void SendMessageToClient(string connectionId, string message)
+        {
+            computerHub.Clients.Client(connectionId).BroadcastMessageReceived(message);
         }
 
         public interface ISuirvelanceHubModel

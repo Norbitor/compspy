@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<CompSpyWeb.Models.Computer>
 @{
-    ViewBag.Title = "Podgląd sali";
+    ViewBag.Title = "Podgląd sali " + ViewBag.ClassroomName;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -24,6 +24,13 @@
         </div>
     }
 </div>
+<div class="row" style="margin-top: 15px;">
+    <div class="col-md-9">
+        <input type="text" id="msg" style="max-width: none; display: inline; width: 80%" class="form-control" placeholder="Wiadomość do sali" />
+        <input type="button" value="Wyślij" class="btn btn-success" id="btn-send-msg" />
+        <span id="current-in-length">0</span>/<span id="max-in-length">100</span>
+    </div>
+</div>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
@@ -41,6 +48,11 @@
                 hub.server.disconnect("@ViewBag.ClassroomName");
                 $.connection.hub.stop();
             }
+
+            $('#btn-send-msg').click(function (e) {
+                hub.server.sendMessageToClassroom("@ViewBag.ClassroomName", $('#msg').val());
+                $('#msg').val('');
+            })
         });
     </script>
 }
