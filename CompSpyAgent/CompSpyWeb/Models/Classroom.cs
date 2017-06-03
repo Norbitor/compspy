@@ -9,7 +9,7 @@ namespace CompSpyWeb.Models
 {
     public class Classroom
     {
-        public int ID { get; set; }
+        public int ClassroomID { get; set; }
 
         [DisplayName("Nazwa")]
         public string Name { get; set; }

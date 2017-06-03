@@ -11,9 +11,9 @@
         <div class="col-md-4" id="@computer.StationDiscriminant">
             <h3>@computer.StationDiscriminant</h3>
             
-            @if (computer.IsConnected)
+            @if (computer.ConnectionID != null)
             {
-                <a href="@Url.Action("ShowComputer", "Suirvelance", new { id = computer.ID })"><img src="~/Pics/no_connection.png" /></a><br />
+                <a href="@Url.Action("ShowComputer", "Suirvelance", new { id = computer.ComputerID })"><img src="~/Pics/no_connection.png" /></a><br />
                 <p class="label label-success">Połączone</p>
             }
             else

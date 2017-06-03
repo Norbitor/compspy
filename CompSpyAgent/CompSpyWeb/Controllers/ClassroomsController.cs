@@ -109,7 +109,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                var classroomToEdit = db.Classrooms.Find(classroom.ID);
+                var classroomToEdit = db.Classrooms.Find(classroom.ClassroomID);
                 if (ModelState.IsValid && classroomToEdit != null)
                 {
                     classroomToEdit.Name = classroom.Name;

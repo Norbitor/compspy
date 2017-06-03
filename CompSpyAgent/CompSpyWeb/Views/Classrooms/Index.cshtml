@@ -38,8 +38,8 @@
             @Html.DisplayFor(modelItem => item.Editor.FirstName) @Html.DisplayFor(modelItem => item.Creator.LastName)
         </td>
         <td>
-            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Usuń", "Delete", new { id=item.ID }, new { @class = "btn btn-danger" })
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ClassroomID }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ClassroomID }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

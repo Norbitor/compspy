@@ -31,7 +31,7 @@
             @Html.DisplayFor(modelItem => item.Classroom.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsConnected)
+            @Html.DisplayFor(modelItem => item.ConnectionID)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -46,8 +46,8 @@
             @Html.DisplayFor(modelItem => item.Editor.Login)
         </td>
         <td>
-            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Usuń", "Delete", new { id=item.ID }, new { @class = "btn btn-danger" })
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ComputerID }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ComputerID }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

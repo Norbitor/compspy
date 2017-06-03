@@ -209,6 +209,10 @@
     <Compile Include="Migrations\201705191831570_ForeignKeyFix.Designer.cs">
       <DependentUpon>201705191831570_ForeignKeyFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706031042337_CorrectIdFieldsAndConnectionId.cs" />
+    <Compile Include="Migrations\201706031042337_CorrectIdFieldsAndConnectionId.Designer.cs">
+      <DependentUpon>201706031042337_CorrectIdFieldsAndConnectionId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Classroom.cs" />
@@ -315,6 +319,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705191831570_ForeignKeyFix.resx">
       <DependentUpon>201705191831570_ForeignKeyFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706031042337_CorrectIdFieldsAndConnectionId.resx">
+      <DependentUpon>201706031042337_CorrectIdFieldsAndConnectionId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

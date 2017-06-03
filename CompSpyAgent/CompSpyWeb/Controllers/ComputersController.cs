@@ -42,7 +42,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name");
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name");
                 return View();
             }
             return RedirectToAction("", "Home");
@@ -69,7 +69,7 @@ namespace CompSpyWeb.Controllers
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name", computer.ClassroomID);
                 return View(computer);
             }
             return RedirectToAction("", "Home");
@@ -96,7 +96,7 @@ namespace CompSpyWeb.Controllers
                 {
                     return HttpNotFound();
                 }
-                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computer.ClassroomID);
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name", computer.ClassroomID);
                 return View(computer);
             }
             return RedirectToAction("", "Home");
@@ -115,7 +115,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                var computerToEdit = db.Computers.Find(computer.ID);
+                var computerToEdit = db.Computers.Find(computer.ComputerID);
                 if (ModelState.IsValid)
                 {
                     computerToEdit.ClassroomID = computer.ClassroomID;
@@ -127,7 +127,7 @@ namespace CompSpyWeb.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ID", "Name", computerToEdit.ClassroomID);
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name", computerToEdit.ClassroomID);
                 return View(computerToEdit);
             }
             return RedirectToAction("", "Home");
@@ -164,7 +164,7 @@ namespace CompSpyWeb.Controllers
 
             if (comp != null)
             {
-                comp.IsConnected = true;
+                comp.ConnectionID = "fafafa";
                 db.Entry(comp).State = EntityState.Modified;
                 db.SaveChanges();
                 return Content("SUCCESS");
@@ -187,7 +187,7 @@ namespace CompSpyWeb.Controllers
 
             if (comp != null)
             {
-                comp.IsConnected = false;
+                comp.ConnectionID = null;
                 db.Entry(comp).State = EntityState.Modified;
                 db.SaveChanges();
                 return Content("SUCCESS");

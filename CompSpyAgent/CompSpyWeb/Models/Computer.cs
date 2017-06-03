@@ -9,7 +9,7 @@ namespace CompSpyWeb.Models
 {
     public class Computer
     {
-        public int ID { get; set; }
+        public int ComputerID { get; set; }
 
         public int ClassroomID { get; set; }
 
@@ -19,7 +19,7 @@ namespace CompSpyWeb.Models
         [DisplayName("Oznaczenie komputera")]
         public string StationDiscriminant { get; set; }
 
-        public bool IsConnected { get; set; }
+        public string ConnectionID { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

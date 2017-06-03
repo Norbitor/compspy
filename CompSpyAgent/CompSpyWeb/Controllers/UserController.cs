@@ -142,7 +142,7 @@ namespace CompSpyWeb.Controllers
                        where u.UserID == id
                        join p in db.ClassroomPermissions on u.UserID equals p.UserID into perms
                        from perm in perms.DefaultIfEmpty()
-                       join c in db.Classrooms on perm.ClassroomID equals c.ID into cr
+                       join c in db.Classrooms on perm.ClassroomID equals c.ClassroomID into cr
                        select new UserPermissionsViewModel()
                        {
                            UserID = u.UserID,

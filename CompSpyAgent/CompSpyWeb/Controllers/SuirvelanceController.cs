@@ -45,7 +45,7 @@ namespace CompSpyWeb.Controllers
             {
                 return HttpNotFound("Nie znaleziono sali o zadanym ID.");
             }
-            var computers = db.Computers.Where(comp => comp.ClassroomID == classroom.ID).ToList();
+            var computers = db.Computers.Where(comp => comp.ClassroomID == classroom.ClassroomID).ToList();
             ViewBag.ClassroomName = classroom.Name;
             return View(computers);
         }
@@ -58,7 +58,7 @@ namespace CompSpyWeb.Controllers
                 return RedirectToAction("", "Home");
             }
             var computer = db.Computers.Find(id);
-            if (computer == null || !computer.IsConnected)
+            if (computer == null || computer.ConnectionID == null)
             {
                 return HttpNotFound("Nie znaleziono komputera o zadanym ID lub komputer nie jest wlaczony.");
             }
@@ -71,29 +71,29 @@ namespace CompSpyWeb.Controllers
             if (userid == null)
             {
                 classrooms = (from classroom in db.Classrooms
-                              join computer in db.Computers on classroom.ID equals computer.ClassroomID into computers
+                              join computer in db.Computers on classroom.ClassroomID equals computer.ClassroomID into computers
                               select new ClassroomViewModel()
                               {
-                                  ID = classroom.ID,
+                                  ID = classroom.ClassroomID,
                                   Name = classroom.Name,
                                   Location = classroom.Location,
                                   ComputersCount = computers.Count(),
-                                  ActiveComputers = computers.Where(x => x.IsConnected).Count()
+                                  ActiveComputers = computers.Where(x => x.ConnectionID != null).Count()
                               }).ToList();
             }
             else
             {
                 classrooms = (from classroom in db.Classrooms
-                              join cperm in db.ClassroomPermissions on classroom.ID equals cperm.ClassroomID
-                              join computer in db.Computers on classroom.ID equals computer.ClassroomID into computers
+                              join cperm in db.ClassroomPermissions on classroom.ClassroomID equals cperm.ClassroomID
+                              join computer in db.Computers on classroom.ClassroomID equals computer.ClassroomID into computers
                               where cperm.UserID == userid
                               select new ClassroomViewModel()
                               {
-                                  ID = classroom.ID,
+                                  ID = classroom.ClassroomID,
                                   Name = classroom.Name,
                                   Location = classroom.Location,
                                   ComputersCount = computers.Count(),
-                                  ActiveComputers = computers.Where(x => x.IsConnected).Count()
+                                  ActiveComputers = computers.Where(x => x.ConnectionID != null).Count()
                               }).ToList();
             }
             return classrooms;
