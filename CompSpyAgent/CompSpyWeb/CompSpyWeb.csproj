@@ -213,7 +213,13 @@
     <Compile Include="Migrations\201706031042337_CorrectIdFieldsAndConnectionId.Designer.cs">
       <DependentUpon>201706031042337_CorrectIdFieldsAndConnectionId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.cs" />
+    <Compile Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.Designer.cs">
+      <DependentUpon>201706032020436_AddBlackListAndAbuseEntities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Abuse.cs" />
+    <Compile Include="Models\Blacklist.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Classroom.cs" />
     <Compile Include="Models\ClassroomPermission.cs" />
@@ -322,6 +328,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706031042337_CorrectIdFieldsAndConnectionId.resx">
       <DependentUpon>201706031042337_CorrectIdFieldsAndConnectionId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.resx">
+      <DependentUpon>201706032020436_AddBlackListAndAbuseEntities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -14,6 +14,8 @@ namespace CompSpyWeb.DAL
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Computer> Computers { get; set; }
         public DbSet<ClassroomPermission> ClassroomPermissions { get; set; }
+        public DbSet<Blacklist> Blacklists { get; set; }
+        public DbSet<Abuse> Abuses { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
