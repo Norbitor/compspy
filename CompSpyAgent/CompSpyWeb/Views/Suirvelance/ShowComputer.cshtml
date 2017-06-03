@@ -1,7 +1,64 @@
-﻿
+﻿@model CompSpyWeb.Models.Computer
 @{
-    ViewBag.Title = "ShowComputer";
+    ViewBag.Title = "Monitoring komputera " + Model.StationDiscriminant;
 }
 
-<h2>ShowComputer</h2>
+<h2>@ViewBag.Title</h2>
 
+<div class="row">
+    <div class="col-md-9">
+        <h3>Ekran komputera</h3>
+        <img src="~/Pics/no_connection.png" style="width: 100%" />
+    </div>
+    <div class="col-md-3">
+        <h3>Lista procesów</h3>
+        <table class="table">
+            <tr>
+                <th>Nazwa procesu</th>
+                <th>Użycie pamięci</th>
+            </tr>
+            <tr>
+                <td>devenv.exe</td>
+                <td>283600 K</td>
+            </tr>
+            <tr>
+                <td>opera.exe</td>
+                <td>134384 K</td>
+            </tr>
+            <tr>
+                <td>Spotify.exe</td>
+                <td>118216 K</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row" style="margin-top: 15px;">
+    <div class="col-md-9">
+        <input type="text" style="max-width: none; display: inline; width: 80%" class="form-control" placeholder="Wiadomość do użytkownika" />
+        <input type="button" value="Wyślij" class="btn btn-success" />
+        <span id="current-in-length">0</span>/<span id="max-in-length">100</span>
+    </div>
+    
+</div>
+
+<p style="margin-top: 15px">
+    @Html.ActionLink("Powrót do monitoringu sali", "ShowRoom", new { id = Model.ClassroomID }, new { @class = "btn btn-primary" })
+</p>
+
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            var hub = $.connection.suirvelanceHub;
+
+            $.connection.hub.start().done(function () {
+            });
+
+            window.onbeforeunload = function (e) {
+                $.connection.hub.stop();
+            }
+        });
+    </script>
+}

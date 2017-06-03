@@ -62,7 +62,7 @@ namespace CompSpyWeb.Controllers
             {
                 return HttpNotFound("Nie znaleziono komputera o zadanym ID lub komputer nie jest wlaczony.");
             }
-            return View();
+            return View(computer);
         }
 
         private ICollection<ClassroomViewModel> PopulateClassroomList(int? userid)
