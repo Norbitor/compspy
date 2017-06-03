@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using CompSpyWeb.DAL;
+using System.Data.Entity;
 
 namespace CompSpyWeb.Controllers.Hubs
 {
@@ -15,13 +16,21 @@ namespace CompSpyWeb.Controllers.Hubs
         }
 
         public void Connect(string stationDiscr)
-        {        
+        {
             using (var ctx = new CompSpyContext())
             {
                 var comp = ctx.Computers.Where(c => c.StationDiscriminant == stationDiscr).FirstOrDefault();
                 if (comp != null)
                 {
+                    comp.ConnectionID = Context.ConnectionId;
+                    ctx.Entry(comp).State = EntityState.Modified;
+                    ctx.SaveChanges();
+
                     Groups.Add(Context.ConnectionId, comp.Classroom.Name);
+                    Clients.Client(Context.ConnectionId).ConnectionFeedback(true);
+                } else
+                {
+                    Clients.Client(Context.ConnectionId).ConnectionFeedback(false);
                 }
             }
         }
@@ -33,6 +42,9 @@ namespace CompSpyWeb.Controllers.Hubs
                 var comp = ctx.Computers.Where(c => c.StationDiscriminant == stationDiscr).FirstOrDefault();
                 if (comp != null)
                 {
+                    comp.ConnectionID = null;
+                    ctx.Entry(comp).State = EntityState.Modified;
+                    ctx.SaveChanges();
                     Groups.Remove(Context.ConnectionId, comp.Classroom.Name);
                 }
             }
@@ -46,6 +58,8 @@ namespace CompSpyWeb.Controllers.Hubs
         public interface IComputerHubModel
         {
             void BroadcastMessageReceived(string msg);
+            void ConnectionFeedback(bool success);
+
             void StartLowQualityTransmission();
             void StopLowQualityTransmission();
 

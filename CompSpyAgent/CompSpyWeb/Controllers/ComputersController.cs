@@ -155,51 +155,6 @@ namespace CompSpyWeb.Controllers
             
         }
 
-        [HttpPost]
-        public ActionResult Connect(string stationId, string secret)
-        {
-            var comp = (from c in db.Computers
-                        where c.StationDiscriminant == stationId
-                        select c).FirstOrDefault();
-
-            if (comp != null)
-            {
-                comp.ConnectionID = "fafafa";
-                db.Entry(comp).State = EntityState.Modified;
-                db.SaveChanges();
-                return Content("SUCCESS");
-            }
-            else
-            {
-                return Content("FAIL Computer is not authorized!");
-            }
-           
-
-            
-        }
-
-        [HttpPost]
-        public ActionResult Disconnect(string stationId, string secret)
-        {
-            var comp = (from c in db.Computers
-                        where c.StationDiscriminant == stationId
-                        select c).FirstOrDefault();
-
-            if (comp != null)
-            {
-                comp.ConnectionID = null;
-                db.Entry(comp).State = EntityState.Modified;
-                db.SaveChanges();
-                return Content("SUCCESS");
-            }
-            else
-            {
-                return Content("FAIL Computer is not authorized!");
-            }
-
-
-        }
-
         private bool CheckUserPermission()
         {
             int uid = (int)Session["UserID"];

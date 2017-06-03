@@ -22,53 +22,50 @@ namespace CompSpyAgent
         {
             this.hubAddr = hubAddr;
             this.appForm = appForm;
-
-            EstablishConnection();
+            
             hubConnection = new HubConnection(hubAddr);
             computerHub = hubConnection.CreateHubProxy("ComputerHub");
             ConfigureRPCHandlers();
         }
 
-        private async void EstablishConnection()
+        private void EstablishConnection()
         {
             var parameters = new Dictionary<string, string>
             {
                 { "stationId", ConfigurationManager.AppSettings["stationDiscr"]},
                 { "secret", ConfigurationManager.AppSettings["secret"] }
             };
-            var content = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync(hubAddr + "/Computers/Connect", content);
-            var responseStr = await response.Content.ReadAsStringAsync();
-            if (responseStr.Contains("SUCCESS"))
-            {
-                appForm.ShowTrayMessage("Connection to server established");
-                appForm.SetConnectionStateLabel("Connected");
-                await computerHub.Invoke("Connect", ConfigurationManager.AppSettings["stationDiscr"]);
-            } else
-            {
-                appForm.ShowTrayMessage("Connection to server failed");
-                appForm.SetConnectionStateLabel("Failed");
-                throw new ServerConnectionException(responseStr);
-            }
+            computerHub.Invoke("Connect", ConfigurationManager.AppSettings["stationDiscr"]);
         }
 
-        public async void CloseConnection()
+        public void CloseConnection()
         {
             var parameters = new Dictionary<string, string>
             {
                 { "stationId", ConfigurationManager.AppSettings["stationDiscr"] },
                 { "secret", ConfigurationManager.AppSettings["secret"] }
             };
-            var content = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync(hubAddr + "/Computers/Disconnect", content);
-            await computerHub.Invoke("Disconnect", ConfigurationManager.AppSettings["stationDiscr"]);
+            computerHub.Invoke("Disconnect", ConfigurationManager.AppSettings["stationDiscr"]);
         }
 
         private void ConfigureRPCHandlers()
         {
-            computerHub.On<string>("BroadcastMessageReceived", x =>
+            computerHub.On<string>("BroadcastMessageReceived", msg =>
             {
-                appForm.ShowTrayMessage(x);
+                appForm.ShowTrayMessage(msg);
+            });
+            computerHub.On<bool>("ConnectionFeedback", isSuccessfull =>
+            {
+                if (isSuccessfull)
+                {
+                    appForm.ShowTrayMessage("Connected");
+                    appForm.SetConnectionStateLabel("Connected");
+                }
+                else
+                {
+                    appForm.ShowTrayMessage("Not connected!");
+                    appForm.SetConnectionStateLabel("Error");
+                }
             });
             computerHub.On("StartLowQualityTransmission", () =>
             {
@@ -91,6 +88,7 @@ namespace CompSpyAgent
         public void StartListening()
         {
             hubConnection.Start().Wait();
+            EstablishConnection();
         }
     }
 }
