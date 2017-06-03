@@ -21,6 +21,18 @@ namespace CompSpyWeb.Controllers.Hubs
             chub.Clients.Group(classroom).StopLowQualityTransmission();
         }
 
+        public void ConnectHq(string connectionId)
+        {
+            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
+            chub.Clients.Client(connectionId).StartHighQualityTransmission();
+        }
+
+        public void DisconnectHq(string connectionId)
+        {
+            var chub = GlobalHost.ConnectionManager.GetHubContext<ComputerHub, IComputerHubModel>();
+            chub.Clients.Client(connectionId).StopHighQualityTransmission();
+        }
+
         public interface ISuirvelanceHubModel
         {
             void ComputerDataReceived(string jsonData);

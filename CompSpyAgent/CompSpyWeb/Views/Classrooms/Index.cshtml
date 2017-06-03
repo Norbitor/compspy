@@ -35,7 +35,7 @@
             @Html.DisplayFor(modelItem => item.LastEdit)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Editor.FirstName) @Html.DisplayFor(modelItem => item.Creator.LastName)
+            @Html.DisplayFor(modelItem => item.Editor.Login)
         </td>
         <td>
             @Html.ActionLink("Edytuj", "Edit", new { id=item.ClassroomID }, new { @class = "btn btn-primary" })

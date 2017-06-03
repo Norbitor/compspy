@@ -31,7 +31,14 @@
             @Html.DisplayFor(modelItem => item.Classroom.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ConnectionID)
+            @if(item.ConnectionID != null)
+            {
+                <span>Tak</span>
+            }
+            else
+            {
+                <span>Nie</span>
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedOn)
