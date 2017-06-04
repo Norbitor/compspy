@@ -90,14 +90,6 @@ namespace CompSpyAgent
             automatycznie = false;
             czasAutomatycznie = 30;
             czasOst = DateTime.Now;
-
-            Thread watek = new Thread(() =>
-            {
-                TimeSpan ts = DateTime.Now - czasOst;
-                //if (TimeSpan.Compare()) ;
-            }
-            );
-            watek.Start();
         }
 
 
@@ -204,7 +196,7 @@ namespace CompSpyAgent
             Graphics g = Graphics.FromImage(img);
 
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
-            img.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             byte[] imageBytes = stream.ToArray();
 
             return Convert.ToBase64String(imageBytes);

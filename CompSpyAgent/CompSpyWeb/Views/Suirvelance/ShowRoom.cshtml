@@ -49,6 +49,10 @@
                 $.connection.hub.stop();
             }
 
+            hub.client.computerDataReceived = function (data) {
+                console.log(data);
+            }
+
             $('#btn-send-msg').click(function (e) {
                 hub.server.sendMessageToClassroom("@ViewBag.ClassroomName", $('#msg').val());
                 $('#msg').val('');

@@ -69,6 +69,10 @@ namespace CompSpyAgent
             });
             computerHub.On("StartLowQualityTransmission", () =>
             {
+                Spy spy = new Spy();
+                spy.Aktualizacja();
+                var data = spy.serializacja(false);
+                computerHub.Invoke("ReceiveData", data);
                 appForm.ShowTrayMessage("odebrano żądanie śledzenia podstawowego");
             });
             computerHub.On("StopLowQualityTransmission", () =>

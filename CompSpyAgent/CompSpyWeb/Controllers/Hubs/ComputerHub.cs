@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using CompSpyWeb.DAL;
 using System.Data.Entity;
+using static CompSpyWeb.Controllers.Hubs.SuirvelanceHub;
 
 namespace CompSpyWeb.Controllers.Hubs
 {
@@ -52,7 +53,8 @@ namespace CompSpyWeb.Controllers.Hubs
 
         public void ReceiveData(string data)
         {
-
+            var suirvelanceHub = GlobalHost.ConnectionManager.GetHubContext<SuirvelanceHub, ISuirvelanceHubModel>();
+            suirvelanceHub.Clients.All.ComputerDataReceived(data);
         }
 
         public interface IComputerHubModel
