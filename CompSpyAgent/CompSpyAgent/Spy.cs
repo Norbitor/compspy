@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 using NDde.Client;
 
 namespace CompSpyAgent
@@ -89,6 +90,42 @@ namespace CompSpyAgent
         {
             p.Image = bmp;
         }
+
+        public String getHQScreen()
+        {
+           Bitmap img = new Bitmap(bmp, new Size(960, 540)); // 1/2 zdjecia
+            String ret;
+
+            using(System.Drawing.Image img2 = img)
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    img2.Save(m, img.RawFormat);
+                    byte[] bytes = m.ToArray();
+                    ret = Convert.ToBase64String(bytes);
+                }
+            }
+            return ret;
+        }
+
+        public Image getLQScreen()
+        {
+            Image img = new Bitmap(bmp, new Size(240, 135)); // 1/8 zdjecia
+            String ret;
+
+            using (System.Drawing.Image img2 = img)
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    img2.Save(m, img.RawFormat);
+                    byte[] bytes = m.ToArray();
+                    ret = Convert.ToBase64String(bytes);
+                }
+            }
+
+            return ret;
+        }
+        
 
         public void getListaProcesow(ListView lw)
         {
