@@ -112,9 +112,28 @@ namespace CompSpyAgent
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            label4.Text = "Rozpoczęcie aktualizacji...";
-            Spy s = new Spy();
+            bool hq = false;
 
+            label4.Text = "Rozpoczęcie aktualizacji";
+            Spy s = new Spy();
+            s.Aktualizacja();
+            label4.Text = "Zaktualizowano stan";
+
+            if (hq == true)
+            {
+                label4.Text = "Rozpoczecie wysylania (HQ)";
+                srvhan.SendData(s.serializacja(true));
+                label4.Text = "Zakonczenie wysylania (HQ)";
+            }
+            else
+            {
+                label4.Text = "Rozpoczecie wysylania (LQ)";
+                srvhan.SendData(s.serializacja(false));
+                label4.Text = "Zakonczenie wysylania (LQ)";
+            }
+
+
+            //srvhan
         }
     }
 }

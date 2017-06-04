@@ -90,5 +90,10 @@ namespace CompSpyAgent
             hubConnection.Start().Wait();
             EstablishConnection();
         }
+
+        public void SendData(String data)
+        {
+            hubConnection.Send(data);
+        }
     }
 }
