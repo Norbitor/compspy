@@ -108,7 +108,7 @@ namespace CompSpyAgent
             return ret;
         }
 
-        public Image getLQScreen()
+        public String getLQScreen()
         {
             Image img = new Bitmap(bmp, new Size(240, 135)); // 1/8 zdjecia
             String ret;
