@@ -1,0 +1,26 @@
+﻿@model IEnumerable<CompSpyWeb.Models.Blacklist>
+@{
+    ViewBag.Title = "Blacklista";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+        <th>Nazwa procesu</th>
+    </tr>
+
+    @foreach (var blacklist in Model)
+    {
+        <tr>
+            <td>@blacklist.ProcessName</td>
+            <td>
+                @Html.ActionLink("Edytuj", "Edit", "Blacklist", new { id = @blacklist.UserID }, new { @class = "btn btn-primary" })
+                <a href="#" data-toggle="modal" data-target="#delConfirmDialog" class="btn btn-danger delopt" data-id="@blacklist.BlacklistID">Usuń</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+

@@ -182,6 +182,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BlacklistController.cs" />
     <Compile Include="Controllers\ClassroomsController.cs" />
     <Compile Include="Controllers\ComputersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -303,6 +304,9 @@
     <Content Include="Views\Suirvelance\ShowRoom.cshtml" />
     <Content Include="Views\User\Permissions.cshtml" />
     <Content Include="Views\Suirvelance\ShowComputer.cshtml" />
+    <Content Include="Views\Blacklist\Index.cshtml" />
+    <Content Include="Views\Blacklist\New.cshtml" />
+    <Content Include="Views\Blacklist\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
