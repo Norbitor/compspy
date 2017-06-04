@@ -75,7 +75,14 @@ namespace CompSpyAgent
 
         private void button5_Click(object sender, EventArgs e)
         {
-            textBox1.Text = s.serializacja(true);
+            textBox1.Clear();
+            textBox1.Text = System.Xml.Linq.XDocument.Parse(s.serializacja(true)).ToString();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            textBox1.Text = System.Xml.Linq.XDocument.Parse(s.serializacja(false)).ToString();
         }
     }
 }

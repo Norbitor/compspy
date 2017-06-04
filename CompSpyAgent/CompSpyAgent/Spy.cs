@@ -100,30 +100,7 @@ namespace CompSpyAgent
             watek.Start();
         }     
 
-        public void odswiezWysylanyString(bool hq)
-        {
-            String temp;
-            if(hq == true)
-            {
-                temp = getImageBase64(getHQScreen());
-            }
-            else
-            {
-                temp = getImageBase64(getLQScreen());
-            }
-
-            temp += "@";
-            foreach(var p in listaProcesow)
-            {
-                temp += p.ToString() + "#";
-            }
-
-            temp += "@";
-            foreach(var p in listaStron)
-            {
-                temp += p.ToString() + "#";
-            }
-        }
+      
         
         public void Aktualizacja()
         {
@@ -223,19 +200,17 @@ namespace CompSpyAgent
         }
         public String getImageBase64(Bitmap img)
         {
-            using (System.Drawing.Image image = img)
-            {
-                using (MemoryStream m = new MemoryStream())
+           
+                using (MemoryStream memory = new MemoryStream())
                 {
                     try
                     {
-                        image.Save(m, image.RawFormat);
+                        img.Save(memory, img.RawFormat);
                     }
                     catch { }
-                    byte[] bytes = m.ToArray();
-                    return Convert.ToBase64String(bytes);
+                    byte[] tab = memory.ToArray();
+                    return Convert.ToBase64String(tab);
                 }
-            }
     }
 
         public void getListaProcesow(ListView lw)
