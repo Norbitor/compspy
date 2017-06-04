@@ -7,6 +7,7 @@ using Microsoft.AspNet.SignalR.Client;
 using System.Windows.Forms;
 using System.Net.Http;
 using System.Configuration;
+using System.Timers;
 
 namespace CompSpyAgent
 {
@@ -18,14 +19,44 @@ namespace CompSpyAgent
         private ApplicationForm appForm;
         private string hubAddr;
 
+        private System.Timers.Timer lqTimer;
+        private System.Timers.Timer hqTimer;
+        private Spy spy;
+         
+
         public ServerHandler(string hubAddr, ApplicationForm appForm)
         {
             this.hubAddr = hubAddr;
             this.appForm = appForm;
-            
+
+            spy = new Spy();
+            lqTimer = new System.Timers.Timer();
+            lqTimer.Elapsed += new ElapsedEventHandler(OnLqTimerEvent);
+            lqTimer.Interval = 3000;
+
+            hqTimer = new System.Timers.Timer();
+            hqTimer.Elapsed += new ElapsedEventHandler(OnHqTimerEvent);
+            hqTimer.Interval = 1000;
+
             hubConnection = new HubConnection(hubAddr);
             computerHub = hubConnection.CreateHubProxy("ComputerHub");
             ConfigureRPCHandlers();
+        }
+
+        private void OnLqTimerEvent(object o, ElapsedEventArgs e)
+        {
+            spy.Aktualizacja();
+            var data = spy.serializacja(false);
+            computerHub.Invoke("ReceiveData", data);
+            Console.WriteLine("[INFO] LQ Screen done");
+        }
+
+        private void OnHqTimerEvent(object o, ElapsedEventArgs e)
+        {
+            spy.Aktualizacja();
+            var data = spy.serializacja(true);
+            computerHub.Invoke("ReceiveData", data);
+            Console.WriteLine("[INFO] HQ Screen done");
         }
 
         private void EstablishConnection()
@@ -69,23 +100,19 @@ namespace CompSpyAgent
             });
             computerHub.On("StartLowQualityTransmission", () =>
             {
-                Spy spy = new Spy();
-                spy.Aktualizacja();
-                var data = spy.serializacja(false);
-                computerHub.Invoke("ReceiveData", data);
-                appForm.ShowTrayMessage("odebrano żądanie śledzenia podstawowego");
+                lqTimer.Start();
             });
             computerHub.On("StopLowQualityTransmission", () =>
             {
-                appForm.ShowTrayMessage("odebrano żądanie zakończenia śledzenia podst.");
+                lqTimer.Stop();
             });
             computerHub.On("StartHighQualityTransmission", () =>
             {
-                appForm.ShowTrayMessage("odebrano żądanie śledzenia hq");
+                hqTimer.Start();
             });
             computerHub.On("StopHighQualityTransmission", () =>
             {
-                appForm.ShowTrayMessage("odebrano żądanie zakończenia śledzenia hq");
+                hqTimer.Stop();
             });
         }
 

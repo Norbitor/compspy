@@ -52,6 +52,18 @@
         $(function () {
             var hub = $.connection.suirvelanceHub;
 
+            hub.client.computerDataReceived = function (data) {
+                console.log(data);
+            }
+
+            hub.client.computerConnected = function (stationDiscr) {
+                console.log("xyz");
+            }
+
+            hub.client.computerDisconnected = function (stationDiscr) {
+                console.log("zyx");
+            }
+
             $.connection.hub.start().done(function () {
                 hub.server.connectHq("@Model.ConnectionID");
             });

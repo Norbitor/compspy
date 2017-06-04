@@ -55,6 +55,7 @@ namespace CompSpyWeb.Controllers.Hubs
         {
             var suirvelanceHub = GlobalHost.ConnectionManager.GetHubContext<SuirvelanceHub, ISuirvelanceHubModel>();
             suirvelanceHub.Clients.All.ComputerDataReceived(data);
+            suirvelanceHub.Clients.All.ComputerConnected("zzz");
         }
 
         public interface IComputerHubModel

@@ -40,17 +40,24 @@
         $(function () {
             var hub = $.connection.suirvelanceHub;
 
+            hub.client.computerDataReceived = function (data) {
+                console.log(data);
+            }
+
+            hub.client.computerConnected = function (stationDiscr) {
+                console.log("xyz");
+            }
+
+            hub.client.computerDisconnected = function (stationDiscr) {
+                console.log("zyx");
+            }
+
             $.connection.hub.start().done(function () {
                 hub.server.connect("@ViewBag.ClassroomName");
             });
 
             window.onbeforeunload = function (e) {
                 hub.server.disconnect("@ViewBag.ClassroomName");
-                $.connection.hub.stop();
-            }
-
-            hub.client.computerDataReceived = function (data) {
-                console.log(data);
             }
 
             $('#btn-send-msg').click(function (e) {
