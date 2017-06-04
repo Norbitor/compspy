@@ -109,5 +109,12 @@ namespace CompSpyAgent
             txbServerIP.Text = ConfigurationManager.AppSettings["serverUri"];
             stationDiscrTxb.Text = ConfigurationManager.AppSettings["stationDiscr"];
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label4.Text = "Rozpoczęcie aktualizacji...";
+            Spy s = new Spy();
+
+        }
     }
 }
