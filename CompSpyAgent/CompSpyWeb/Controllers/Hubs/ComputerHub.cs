@@ -6,11 +6,19 @@ using Microsoft.AspNet.SignalR;
 using CompSpyWeb.DAL;
 using System.Data.Entity;
 using static CompSpyWeb.Controllers.Hubs.SuirvelanceHub;
+using System.Xml.Linq;
 
 namespace CompSpyWeb.Controllers.Hubs
 {
     public class ComputerHub : Hub<ComputerHub.IComputerHubModel>
     {
+        private IHubContext<ISuirvelanceHubModel> suirvelanceHub;
+
+        public ComputerHub()
+        {
+            suirvelanceHub = GlobalHost.ConnectionManager.GetHubContext<SuirvelanceHub, ISuirvelanceHubModel>();
+        }
+
         public void BroadcastMessage(string msg)
         {
             Clients.All.BroadcastMessageReceived(msg);
@@ -29,6 +37,7 @@ namespace CompSpyWeb.Controllers.Hubs
 
                     Groups.Add(Context.ConnectionId, comp.Classroom.Name);
                     Clients.Client(Context.ConnectionId).ConnectionFeedback(true);
+                    suirvelanceHub.Clients.All.ComputerConnected(stationDiscr);
                 } else
                 {
                     Clients.Client(Context.ConnectionId).ConnectionFeedback(false);
@@ -47,15 +56,16 @@ namespace CompSpyWeb.Controllers.Hubs
                     ctx.Entry(comp).State = EntityState.Modified;
                     ctx.SaveChanges();
                     Groups.Remove(Context.ConnectionId, comp.Classroom.Name);
+                    suirvelanceHub.Clients.All.ComputerDisconnected(stationDiscr);
                 }
             }
         }
 
         public void ReceiveData(string data)
         {
-            var suirvelanceHub = GlobalHost.ConnectionManager.GetHubContext<SuirvelanceHub, ISuirvelanceHubModel>();
+            Console.WriteLine("Data packet received");
+            
             suirvelanceHub.Clients.All.ComputerDataReceived(data);
-            suirvelanceHub.Clients.All.ComputerConnected("zzz");
         }
 
         public interface IComputerHubModel

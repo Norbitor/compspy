@@ -1,11 +1,14 @@
-﻿using System;
+﻿using CompSpyWeb.DAL;
+using CompSpyWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CompSpyWeb.Controllers
 {
-    public class BlacklistController
+    public class BlacklistController : Controller
     {
         private CompSpyContext db = new CompSpyContext();
 

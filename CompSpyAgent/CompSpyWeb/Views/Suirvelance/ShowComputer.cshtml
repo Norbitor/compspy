@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-9">
         <h3>Ekran komputera</h3>
-        <img src="~/Pics/no_connection.png" style="width: 100%" />
+        <img src="~/Pics/no_connection.png" style="width: 100%" id="screen" />
     </div>
     <div class="col-md-3">
         <h3>Lista procesów</h3>
@@ -53,15 +53,20 @@
             var hub = $.connection.suirvelanceHub;
 
             hub.client.computerDataReceived = function (data) {
-                console.log(data);
+                /*xdata = $.parseXML(data);
+                $xml = $(xdata);
+                $pdata = $xml.find('image');
+                src = $pdata[0].textContent;
+                $("#screen").attr("src", 'data:image/png;base64,' + src);*/
+                console.log("odebrano paczke" + data);
             }
 
             hub.client.computerConnected = function (stationDiscr) {
-                console.log("xyz");
+                console.log("Polaczyl sie " + stationDiscr);
             }
 
             hub.client.computerDisconnected = function (stationDiscr) {
-                console.log("zyx");
+                console.log("Rozlaczyl sie " + stationDiscr);
             }
 
             $.connection.hub.start().done(function () {

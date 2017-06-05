@@ -32,7 +32,7 @@ namespace CompSpyAgent
             spy = new Spy();
             lqTimer = new System.Timers.Timer();
             lqTimer.Elapsed += new ElapsedEventHandler(OnLqTimerEvent);
-            lqTimer.Interval = 3000;
+            lqTimer.Interval = 10000;
 
             hqTimer = new System.Timers.Timer();
             hqTimer.Elapsed += new ElapsedEventHandler(OnHqTimerEvent);
@@ -53,9 +53,9 @@ namespace CompSpyAgent
 
         private void OnHqTimerEvent(object o, ElapsedEventArgs e)
         {
-            spy.Aktualizacja();
-            var data = spy.serializacja(true);
-            computerHub.Invoke("ReceiveData", data);
+            //spy.Aktualizacja();
+            //var data = spy.serializacja(true);
+            computerHub.Invoke("ReceiveData", "dziendobry");
             Console.WriteLine("[INFO] HQ Screen done");
         }
 
@@ -90,12 +90,12 @@ namespace CompSpyAgent
                 if (isSuccessfull)
                 {
                     appForm.ShowTrayMessage("Connected");
-                    appForm.SetConnectionStateLabel("Connected");
+                    //appForm.SetConnectionStateLabel("Connected");
                 }
                 else
                 {
                     appForm.ShowTrayMessage("Not connected!");
-                    appForm.SetConnectionStateLabel("Error");
+                    //appForm.SetConnectionStateLabel("Error");
                 }
             });
             computerHub.On("StartLowQualityTransmission", () =>

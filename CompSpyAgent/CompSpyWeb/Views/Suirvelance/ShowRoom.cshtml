@@ -41,15 +41,19 @@
             var hub = $.connection.suirvelanceHub;
 
             hub.client.computerDataReceived = function (data) {
-                console.log(data);
+                xdata = $.parseXML(data);
+                $xml = $(xdata);
+                $pdata = $xml.find('image');
+                src = $pdata[0].textContent;
+                $("#PC1 img").attr("src",'data:image/png;base64,' + src);
             }
 
             hub.client.computerConnected = function (stationDiscr) {
-                console.log("xyz");
+                console.log("Polaczyl sie " + stationDiscr);
             }
 
             hub.client.computerDisconnected = function (stationDiscr) {
-                console.log("zyx");
+                console.log("Rozlaczyl sie " + stationDiscr);
             }
 
             $.connection.hub.start().done(function () {
