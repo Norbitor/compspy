@@ -18,21 +18,25 @@ namespace CompSpyWeb.Controllers.Hubs
 
         public void Connect(string classroom)
         {
+            Groups.Add(Context.ConnectionId, classroom);
             computerHub.Clients.Group(classroom).StartLowQualityTransmission();
         }
 
         public void Disconnect(string classroom)
         {
+            Groups.Remove(Context.ConnectionId, classroom);
             computerHub.Clients.Group(classroom).StopLowQualityTransmission();
         }
 
         public void ConnectHq(string connectionId)
         {
+            Groups.Add(Context.ConnectionId, connectionId);
             computerHub.Clients.Client(connectionId).StartHighQualityTransmission();
         }
 
         public void DisconnectHq(string connectionId)
         {
+            Groups.Remove(Context.ConnectionId, connectionId);
             computerHub.Clients.Client(connectionId).StopHighQualityTransmission();
         }
 

@@ -37,7 +37,8 @@ namespace CompSpyWeb.Controllers.Hubs
 
                     Groups.Add(Context.ConnectionId, comp.Classroom.Name);
                     Clients.Client(Context.ConnectionId).ConnectionFeedback(true);
-                    suirvelanceHub.Clients.All.ComputerConnected(stationDiscr);
+                    var groupsToInform = new List<string> { comp.Classroom.Name, Context.ConnectionId };
+                    suirvelanceHub.Clients.Groups(groupsToInform).ComputerConnected(stationDiscr);
                 } else
                 {
                     Clients.Client(Context.ConnectionId).ConnectionFeedback(false);
@@ -55,17 +56,26 @@ namespace CompSpyWeb.Controllers.Hubs
                     comp.ConnectionID = null;
                     ctx.Entry(comp).State = EntityState.Modified;
                     ctx.SaveChanges();
+
                     Groups.Remove(Context.ConnectionId, comp.Classroom.Name);
-                    suirvelanceHub.Clients.All.ComputerDisconnected(stationDiscr);
+                    var groupsToInform = new List<string> { comp.Classroom.Name, Context.ConnectionId };
+                    suirvelanceHub.Clients.Groups(groupsToInform).ComputerDisconnected(stationDiscr);
                 }
             }
         }
 
         public void ReceiveData(string data)
         {
-            Console.WriteLine("Data packet received");
-            
-            suirvelanceHub.Clients.All.ComputerDataReceived(data);
+            // TODO: Determine station dicr and HQ/LQ by data
+            using (var ctx = new CompSpyContext())
+            {
+                var comp = ctx.Computers.Where(c => c.ConnectionID == Context.ConnectionId).FirstOrDefault();
+                if (comp != null)
+                {
+                    suirvelanceHub.Clients.Group(comp.Classroom.Name).ComputerDataReceived(data);
+                }
+            }
+                
         }
 
         public interface IComputerHubModel
