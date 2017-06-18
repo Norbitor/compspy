@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.Net.Http;
 using System.Configuration;
 using System.Timers;
+using System.Net;
+using System.IO;
 
 namespace CompSpyAgent
 {
@@ -45,10 +47,26 @@ namespace CompSpyAgent
 
         private void OnLqTimerEvent(object o, ElapsedEventArgs e)
         {
+            //spy.Aktualizacja();
+            //var data = spy.serializacja(false);
+            //computerHub.Invoke("ReceiveData", data);
+            //Console.WriteLine("[INFO] LQ Screen done");
             spy.Aktualizacja();
-            var data = spy.serializacja(false);
-            computerHub.Invoke("ReceiveData", data);
-            Console.WriteLine("[INFO] LQ Screen done");
+            
+            var request = (HttpWebRequest)WebRequest.Create("http://localhost:54554/Image/Upload/PC1");
+            var data = spy.getImageByteArray(spy.getLQScreen());
+            
+            request.Method = WebRequestMethods.Http.Post;
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
         }
 
         private void OnHqTimerEvent(object o, ElapsedEventArgs e)

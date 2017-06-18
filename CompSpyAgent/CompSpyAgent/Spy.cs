@@ -199,8 +199,18 @@ namespace CompSpyAgent
             img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             byte[] imageBytes = stream.ToArray();
 
-            return Convert.ToBase64String(imageBytes);
-            
+            return Convert.ToBase64String(imageBytes); 
+        }
+
+        public byte[] getImageByteArray(Bitmap img)
+        {
+            Graphics g = Graphics.FromImage(img);
+
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            byte[] imageBytes = stream.ToArray();
+
+            return imageBytes;
         }
 
         public void getListaProcesow(ListView lw)
