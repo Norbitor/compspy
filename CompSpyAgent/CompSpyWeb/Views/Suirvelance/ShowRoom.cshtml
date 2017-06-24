@@ -41,10 +41,9 @@
             var hub = $.connection.suirvelanceHub;
 
             hub.client.computerDataReceived = function (data) {
-                xdata = $.parseXML(data);
-                $xml = $(xdata);
-                $pdata = $xml.find('image');
-                src = $pdata[0].textContent.replace(/['"]+/g, '');
+                xdata = JSON.parse(data);
+                console.log(xdata);
+                src = xdata['image'];
                 $("#PC1 img").attr("src",'/Image/DisplayPhoto/' + src);
             }
 

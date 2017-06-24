@@ -66,16 +66,18 @@ namespace CompSpyWeb.Controllers.Hubs
 
         public void ReceiveData(string data)
         {
-            // TODO: Determine station dicr and HQ/LQ by data
+            Clients.Client(Context.ConnectionId).ACK();
+            //// TODO: Determine station dicr and HQ/LQ by data
             using (var ctx = new CompSpyContext())
             {
+
                 var comp = ctx.Computers.Where(c => c.ConnectionID == Context.ConnectionId).FirstOrDefault();
                 if (comp != null)
                 {
                     suirvelanceHub.Clients.Group(comp.Classroom.Name).ComputerDataReceived(data);
                 }
             }
-                
+
         }
 
         public interface IComputerHubModel
@@ -88,6 +90,7 @@ namespace CompSpyWeb.Controllers.Hubs
 
             void StartHighQualityTransmission();
             void StopHighQualityTransmission();
+            void ACK();
         }
     }
 }

@@ -41,6 +41,8 @@ namespace CompSpyAgent
             hqTimer.Interval = 1000;
 
             hubConnection = new HubConnection(hubAddr);
+            hubConnection.TraceLevel = TraceLevels.All;
+            hubConnection.TraceWriter = Console.Out;
             computerHub = hubConnection.CreateHubProxy("ComputerHub");
             ConfigureRPCHandlers();
         }
@@ -75,6 +77,7 @@ namespace CompSpyAgent
                 }
 
                 var fileName = response.Content.ReadAsStringAsync().Result;
+                fileName = fileName.Substring(1, fileName.Length - 2);
                 computerHub.Invoke("ReceiveData", spy.serializacja(fileName, false));
             }
         }
@@ -133,6 +136,10 @@ namespace CompSpyAgent
             computerHub.On("StopHighQualityTransmission", () =>
             {
                 hqTimer.Stop();
+            });
+            computerHub.On("ACK", () =>
+            {
+                Console.WriteLine("ACK");
             });
         }
 
