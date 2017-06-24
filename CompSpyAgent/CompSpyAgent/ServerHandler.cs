@@ -47,34 +47,36 @@ namespace CompSpyAgent
 
         private void OnLqTimerEvent(object o, ElapsedEventArgs e)
         {
-            //spy.Aktualizacja();
-            //var data = spy.serializacja(false);
-            //computerHub.Invoke("ReceiveData", data);
-            //Console.WriteLine("[INFO] LQ Screen done");
-            spy.Aktualizacja();
-            
-            var request = (HttpWebRequest)WebRequest.Create("http://localhost:54554/Image/Upload/PC1");
-            var data = spy.getImageByteArray(spy.getLQScreen());
-            
-            request.Method = WebRequestMethods.Http.Post;
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;
-
-            using (var stream = request.GetRequestStream())
-            {
-                stream.Write(data, 0, data.Length);
-            }
-
-            var response = (HttpWebResponse)request.GetResponse();
-            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            SendData(false);            
         }
 
         private void OnHqTimerEvent(object o, ElapsedEventArgs e)
         {
-            //spy.Aktualizacja();
-            //var data = spy.serializacja(true);
-            computerHub.Invoke("ReceiveData", "dziendobry");
-            Console.WriteLine("[INFO] HQ Screen done");
+            SendData(true);
+        }
+
+        private void SendData(bool hq)
+        {
+            spy.Aktualizacja();
+            var data = spy.getImageByteArray(hq ? spy.getHQScreen() : spy.getLQScreen());
+            HttpContent stationDiscr = new StringContent(ConfigurationManager.AppSettings["stationDiscr"]);
+            HttpContent qualityIndicator = new StringContent("hq");
+            HttpContent screenshot = new ByteArrayContent(data);
+            using (var client = new HttpClient())
+            using (var formData = new MultipartFormDataContent())
+            {
+                formData.Add(stationDiscr, "stationDiscr");
+                formData.Add(qualityIndicator, "quality");
+                formData.Add(screenshot, "uploadFile", "uploadFile");
+                var response = client.PostAsync(hubAddr + "/Image/Upload", formData).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Not so good");
+                }
+
+                var fileName = response.Content.ReadAsStringAsync().Result;
+                computerHub.Invoke("ReceiveData", spy.serializacja(fileName, false));
+            }
         }
 
         private void EstablishConnection()
@@ -138,11 +140,6 @@ namespace CompSpyAgent
         {
             hubConnection.Start().Wait();
             EstablishConnection();
-        }
-
-        public void SendData(String data)
-        {
-            hubConnection.Send(data);
         }
     }
 }

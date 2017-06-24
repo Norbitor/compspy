@@ -308,10 +308,10 @@
     <Content Include="Views\Blacklist\Index.cshtml" />
     <Content Include="Views\Blacklist\New.cshtml" />
     <Content Include="Views\Blacklist\Edit.cshtml" />
+    <Content Include="Views\Image\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ImageUpload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

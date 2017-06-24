@@ -44,8 +44,8 @@
                 xdata = $.parseXML(data);
                 $xml = $(xdata);
                 $pdata = $xml.find('image');
-                src = $pdata[0].textContent;
-                $("#PC1 img").attr("src",'data:image/png;base64,' + src);
+                src = $pdata[0].textContent.replace(/['"]+/g, '');
+                $("#PC1 img").attr("src",'/Image/DisplayPhoto/' + src);
             }
 
             hub.client.computerConnected = function (stationDiscr) {

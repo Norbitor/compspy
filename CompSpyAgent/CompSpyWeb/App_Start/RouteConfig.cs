@@ -14,6 +14,12 @@ namespace CompSpyWeb
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "DisplayPhotoRoute",
+                url: "Image/DisplayPhoto/{filename}",
+                defaults: new { controller = "Image", action = "DisplayPhoto", filename = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

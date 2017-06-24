@@ -12,33 +12,34 @@ namespace CompSpyWeb.Controllers
     public class ImageController : Controller
     {
         [HttpPost]
-        public JsonResult Upload(string stationDiscr, HttpPostedFileBase uploadFile)
+        public JsonResult Upload(string stationDiscr, string quality, HttpPostedFileBase uploadFile)
         {
             JsonResult returnResult = null;
             if (uploadFile.ContentLength > 0)
             {
 
-                string uniqueFileName = stationDiscr + DateTime.Now.ToFileTimeUtc().ToString();
+                string uniqueFileName = stationDiscr + '_' + quality + '_' + DateTime.Now.ToFileTimeUtc().ToString();
                 string uploadRoot = GetUploadsDirectory();
 
-                string filePath = Path.Combine(uploadRoot, uniqueFileName + ".pho");
+                string filePath = Path.Combine(uploadRoot, uniqueFileName + ".png");
 
                 uploadFile.SaveAs(filePath);
                 
                 returnResult = new JsonResult
                 {
                     Data = Path.GetFileNameWithoutExtension(filePath),
-                    ContentType = "text/html",
-                    ContentEncoding = null
+                    ContentType = "application/json",
+                    ContentEncoding = System.Text.Encoding.UTF8
                 };
             }
             return returnResult;
         }
 
-        public ActionResult DisplayPhoto(string Filename)
+        public ActionResult DisplayPhoto(string filename)
         {
+            if (filename == null) return HttpNotFound();
             string uploadRoot = GetUploadsDirectory();
-            return new ImageResult { Image = Bitmap.FromFile(Path.Combine(uploadRoot, Filename)), ImageFormat = ImageFormat.Jpeg };
+            return new ImageResult { Image = Bitmap.FromFile(Path.Combine(uploadRoot, filename + ".png")), ImageFormat = ImageFormat.Png };
         }
 
         private static string GetUploadsDirectory()

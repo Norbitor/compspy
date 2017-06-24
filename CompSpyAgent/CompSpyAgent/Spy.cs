@@ -31,20 +31,23 @@ namespace CompSpyAgent
         public class Komunikat
         {
             [DataMember]
-            public String image { get; set; }
+            public string image { get; set; }
 
             [DataMember]
-            public List<String> listaProcesow { get; set; }
+            public bool hq { get; set; }
 
             [DataMember]
-            public List<String> listaStron { get; set; }
+            public List<string> listaProcesow { get; set; }
 
-            public Komunikat(String img, Process[] procesy, List<String> strony)
+            [DataMember]
+            public List<string> listaStron { get; set; }
+
+            public Komunikat(string img, Process[] procesy, List<string> strony, bool hq)
             {
                 image = img;
-
-                listaProcesow = new List<String>();
-                listaStron = new List<String>();
+                this.hq = hq;
+                listaProcesow = new List<string>();
+                listaStron = new List<string>();
 
                 foreach (var p in procesy)
                 {
@@ -60,17 +63,10 @@ namespace CompSpyAgent
 
         }
 
-        public String serializacja(bool hq)
+        public string serializacja(string imageName, bool hq)
         {
-            Komunikat komunikat;
-            if (hq == true)
-            {
-                komunikat = new Komunikat(getImageBase64(getHQScreen()), listaProcesow, listaStron);
-            }
-            else
-            {
-                komunikat = new Komunikat(getImageBase64(getLQScreen()), listaProcesow, listaStron);
-            }
+            var komunikat = new Komunikat(imageName, listaProcesow, listaStron, hq);
+
             var serializer = new DataContractSerializer(komunikat.GetType());
             var stream = new MemoryStream();
             serializer.WriteObject(stream, komunikat);
