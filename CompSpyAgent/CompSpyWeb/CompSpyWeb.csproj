@@ -122,6 +122,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -218,6 +219,10 @@
     <Compile Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.cs" />
     <Compile Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.Designer.cs">
       <DependentUpon>201706032020436_AddBlackListAndAbuseEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706251936372_ChangeAbuserToComputer.cs" />
+    <Compile Include="Migrations\201706251936372_ChangeAbuserToComputer.Designer.cs">
+      <DependentUpon>201706251936372_ChangeAbuserToComputer.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Abuse.cs" />
@@ -336,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706032020436_AddBlackListAndAbuseEntities.resx">
       <DependentUpon>201706032020436_AddBlackListAndAbuseEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706251936372_ChangeAbuserToComputer.resx">
+      <DependentUpon>201706251936372_ChangeAbuserToComputer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

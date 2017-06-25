@@ -19,6 +19,6 @@ namespace CompSpyWeb.Models
         public bool Read { get; set; }
 
         [ForeignKey("AbuserID")]
-        public virtual User Abuser { get; set; }
+        public virtual Computer Abuser { get; set; }
     }
 }

@@ -60,9 +60,9 @@ namespace CompSpyAgent
         private async void SendData(bool hq)
         {
             spy.Aktualizacja();
-            var data = spy.getImageByteArray(hq ? spy.getHQScreen() : spy.getLQScreen());
+            var data = spy.getImageByteArray(spy.getHQScreen());
             HttpContent stationDiscr = new StringContent(ConfigurationManager.AppSettings["stationDiscr"]);
-            HttpContent qualityIndicator = new StringContent("hq");
+            HttpContent qualityIndicator = new StringContent(hq ? "hq" : "lq");
             HttpContent screenshot = new ByteArrayContent(data);
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
@@ -124,7 +124,6 @@ namespace CompSpyAgent
             });
             computerHub.On("StartLowQualityTransmission", () =>
             {
-                SendData(false);
                 lqTimer.Start();
             });
             computerHub.On("StopLowQualityTransmission", () =>
@@ -133,7 +132,6 @@ namespace CompSpyAgent
             });
             computerHub.On("StartHighQualityTransmission", () =>
             {
-                SendData(true);
                 hqTimer.Start();
             });
             computerHub.On("StopHighQualityTransmission", () =>

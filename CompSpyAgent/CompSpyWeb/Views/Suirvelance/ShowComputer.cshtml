@@ -11,24 +11,28 @@
         <img src="~/Pics/no_connection.png" style="width: 100%" id="screen" />
     </div>
     <div class="col-md-3">
-        <h3>Lista procesów</h3>
-        <table class="table">
-            <tr>
-                <th>Nazwa procesu</th>
-                <th>Użycie pamięci</th>
-            </tr>
-            <tr>
-                <td>devenv.exe</td>
-                <td>283600 K</td>
-            </tr>
-            <tr>
-                <td>opera.exe</td>
-                <td>134384 K</td>
-            </tr>
-            <tr>
-                <td>Spotify.exe</td>
-                <td>118216 K</td>
-            </tr>
+        <h3>Lista procesów niedozwolonych</h3>
+        <table class="table" id="proclist">
+            <thead>
+                <tr>
+                    <th>Nazwa procesu</th>
+                    <!--<th>Użycie pamięci</th>-->
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <h3>Lista stron</h3>
+        <table class="table" id="sitelist">
+            <thead>
+                <tr>
+                    <th>Strona</th>
+                    <!--<th>Użycie pamięci</th>-->
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
     </div>
 </div>
@@ -54,8 +58,20 @@
 
             hub.client.computerDataReceived = function (data) {
                 xdata = JSON.parse(data);
+                console.log(xdata);
                 src = xdata['image'];
                 $("#screen").attr("src", '/Image/DisplayPhoto/' + src);
+                procList = xdata['listaProcesow'];
+                $("#proclist tbody").empty();
+                procList.forEach(function (entry) {
+                    $("#proclist tbody").append('<tr><td>' + entry + '</td></tr>');
+                });
+
+                siteList = xdata['listaStron'];
+                $("#sitelist tbody").empty();
+                siteList.forEach(function (entry) {
+                    $("#sitelist tbody").append('<tr><td>' + entry + '</td></tr>');
+                });
             }
 
             hub.client.computerConnected = function (stationDiscr) {

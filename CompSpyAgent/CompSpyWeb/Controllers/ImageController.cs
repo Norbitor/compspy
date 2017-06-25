@@ -6,14 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CompSpyWeb.DAL;
 
 namespace CompSpyWeb.Controllers
 {
     public class ImageController : Controller
     {
+        private static int cnt = 0;
+
         [HttpPost]
         public JsonResult Upload(string stationDiscr, string quality, HttpPostedFileBase uploadFile)
         {
+            DeleteOldImages();
             JsonResult returnResult = null;
             if (uploadFile.ContentLength > 0)
             {
@@ -24,7 +28,8 @@ namespace CompSpyWeb.Controllers
                 string filePath = Path.Combine(uploadRoot, uniqueFileName + ".png");
 
                 uploadFile.SaveAs(filePath);
-                
+                cnt++;
+
                 returnResult = new JsonResult
                 {
                     Data = Path.GetFileNameWithoutExtension(filePath),
@@ -48,6 +53,24 @@ namespace CompSpyWeb.Controllers
             string uploadRoot = Directory.GetParent(websiteLocation).Parent.FullName;
             uploadRoot = Path.Combine(uploadRoot, "Uploads");
             return uploadRoot;
+        }
+
+        private void DeleteOldImages()
+        {
+            List<string> protectedFiles;
+            using (var ctx = new CompSpyContext())
+            {
+                protectedFiles = ctx.Abuses.Where(a => !a.Read).Select(abuse => abuse.ScreenPath).ToList();
+            }
+            var di = new DirectoryInfo(GetUploadsDirectory());
+            foreach(FileInfo file in di.GetFiles())
+            {
+                if (!protectedFiles.Contains(file.Name.Substring(0, file.Name.Length - 3)) &&
+                    DateTime.Compare(file.CreationTime, DateTime.Now.AddSeconds(-30)) < 0)
+                {
+                    file.Delete();
+                }
+            }
         }
     }
 

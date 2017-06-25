@@ -50,15 +50,15 @@ namespace CompSpyAgent
                 listaProcesow = new List<string>();
                 listaStron = new List<string>();
 
-                //foreach (var p in procesy)
-                //{
-                //    listaProcesow.Add(p.ProcessName);
-                //}
+                foreach (var p in procesy)
+                {
+                    listaProcesow.Add(p.ProcessName);
+                }
 
-                //foreach (var s in strony)
-                //{
-                //    listaStron.Add(s);
-                //}
+                foreach (var s in strony)
+                {
+                    listaStron.Add(s);
+                }
 
             }
 

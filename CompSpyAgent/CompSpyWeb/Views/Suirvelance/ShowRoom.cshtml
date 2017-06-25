@@ -13,12 +13,12 @@
             
             @if (computer.ConnectionID != null)
             {
-                <a href="@Url.Action("ShowComputer", "Suirvelance", new { id = computer.ComputerID })"><img src="~/Pics/no_connection.png" /></a><br />
+                <a href="@Url.Action("ShowComputer", "Suirvelance", new { id = computer.ComputerID })"><img src="~/Pics/no_connection.png" style="width: 240px;" /></a><br />
                 <p class="label label-success">Połączone</p>
             }
             else
             {
-                <img src="~/Pics/no_connection.png" /><br />
+                <img src="~/Pics/no_connection.png" style="width: 240px;" /><br />
                 <p class="label label-warning">Brak połączenia</p>
             }
         </div>
