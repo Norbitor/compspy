@@ -66,7 +66,6 @@ namespace CompSpyWeb.Controllers.Hubs
 
         public void ReceiveData(string data)
         {
-            Clients.Client(Context.ConnectionId).ACK();
             //// TODO: Determine station dicr and HQ/LQ by data
             using (var ctx = new CompSpyContext())
             {
@@ -75,6 +74,7 @@ namespace CompSpyWeb.Controllers.Hubs
                 if (comp != null)
                 {
                     suirvelanceHub.Clients.Group(comp.Classroom.Name).ComputerDataReceived(data);
+                    suirvelanceHub.Clients.Group(Context.ConnectionId).ComputerDataReceived(data);
                 }
             }
 
@@ -90,7 +90,6 @@ namespace CompSpyWeb.Controllers.Hubs
 
             void StartHighQualityTransmission();
             void StopHighQualityTransmission();
-            void ACK();
         }
     }
 }

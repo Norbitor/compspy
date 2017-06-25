@@ -42,7 +42,6 @@
 
             hub.client.computerDataReceived = function (data) {
                 xdata = JSON.parse(data);
-                console.log(xdata);
                 src = xdata['image'];
                 $("#PC1 img").attr("src",'/Image/DisplayPhoto/' + src);
             }

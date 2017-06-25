@@ -34,11 +34,11 @@ namespace CompSpyAgent
             spy = new Spy();
             lqTimer = new System.Timers.Timer();
             lqTimer.Elapsed += new ElapsedEventHandler(OnLqTimerEvent);
-            lqTimer.Interval = 10000;
+            lqTimer.Interval = 5000;
 
             hqTimer = new System.Timers.Timer();
             hqTimer.Elapsed += new ElapsedEventHandler(OnHqTimerEvent);
-            hqTimer.Interval = 1000;
+            hqTimer.Interval = 2000;
 
             hubConnection = new HubConnection(hubAddr);
             hubConnection.TraceLevel = TraceLevels.All;
@@ -57,7 +57,7 @@ namespace CompSpyAgent
             SendData(true);
         }
 
-        private void SendData(bool hq)
+        private async void SendData(bool hq)
         {
             spy.Aktualizacja();
             var data = spy.getImageByteArray(hq ? spy.getHQScreen() : spy.getLQScreen());
@@ -70,15 +70,15 @@ namespace CompSpyAgent
                 formData.Add(stationDiscr, "stationDiscr");
                 formData.Add(qualityIndicator, "quality");
                 formData.Add(screenshot, "uploadFile", "uploadFile");
-                var response = client.PostAsync(hubAddr + "/Image/Upload", formData).Result;
+                var response = await client.PostAsync(hubAddr + "/Image/Upload", formData);
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Not so good");
                 }
 
-                var fileName = response.Content.ReadAsStringAsync().Result;
+                var fileName = await response.Content.ReadAsStringAsync();
                 fileName = fileName.Substring(1, fileName.Length - 2);
-                computerHub.Invoke("ReceiveData", spy.serializacja(fileName, false));
+                await computerHub.Invoke("ReceiveData", spy.serializacja(fileName, hq));
             }
         }
 
@@ -100,6 +100,7 @@ namespace CompSpyAgent
                 { "secret", ConfigurationManager.AppSettings["secret"] }
             };
             computerHub.Invoke("Disconnect", ConfigurationManager.AppSettings["stationDiscr"]);
+            hubConnection.Stop();
         }
 
         private void ConfigureRPCHandlers()
@@ -123,6 +124,7 @@ namespace CompSpyAgent
             });
             computerHub.On("StartLowQualityTransmission", () =>
             {
+                SendData(false);
                 lqTimer.Start();
             });
             computerHub.On("StopLowQualityTransmission", () =>
@@ -131,15 +133,12 @@ namespace CompSpyAgent
             });
             computerHub.On("StartHighQualityTransmission", () =>
             {
+                SendData(true);
                 hqTimer.Start();
             });
             computerHub.On("StopHighQualityTransmission", () =>
             {
                 hqTimer.Stop();
-            });
-            computerHub.On("ACK", () =>
-            {
-                Console.WriteLine("ACK");
             });
         }
 

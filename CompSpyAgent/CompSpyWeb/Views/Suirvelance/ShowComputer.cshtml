@@ -53,12 +53,9 @@
             var hub = $.connection.suirvelanceHub;
 
             hub.client.computerDataReceived = function (data) {
-                /*xdata = $.parseXML(data);
-                $xml = $(xdata);
-                $pdata = $xml.find('image');
-                src = $pdata[0].textContent;
-                $("#screen").attr("src", 'data:image/png;base64,' + src);*/
-                console.log("odebrano paczke" + data);
+                xdata = JSON.parse(data);
+                src = xdata['image'];
+                $("#screen").attr("src", '/Image/DisplayPhoto/' + src);
             }
 
             hub.client.computerConnected = function (stationDiscr) {
