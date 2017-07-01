@@ -23,13 +23,13 @@
                         size="10" style="width: 200px">
                     @foreach (var cr in Model.AllClassrooms)
                 {
-                    if (Model.ClassroomsWithPermissions.Any(x => x.ID == cr.ID))
+                    if (Model.ClassroomsWithPermissions.Any(x => x.ClassroomID == cr.ClassroomID))
                     {
-                            <option value="@cr.ID" selected="selected">@cr.Name @@ @cr.Location</option>
+                            <option value="@cr.ClassroomID" selected="selected">@cr.Name @@ @cr.Location</option>
                         }
                         else
                         {
-                            <option value="@cr.ID">@cr.Name @@ @cr.Location</option>
+                            <option value="@cr.ClassroomID">@cr.Name @@ @cr.Location</option>
                         }
                     }
                 </select>

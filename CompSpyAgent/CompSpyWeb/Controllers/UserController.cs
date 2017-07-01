@@ -160,6 +160,33 @@ namespace CompSpyWeb.Controllers
             return View(data);
         }
 
+        [HttpPost]
+        public ActionResult Permissions([Bind(Include= "UserID, Login, FirstName, LastName, ClassroomsWithPermissions, AllClassrooms")]UserPermissionsViewModel userPerm)
+        {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("", "Home");
+            }
+            if (!CheckUserPermission())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Nie masz uprawnień do tego zasobu.");
+            }
+
+            foreach (var classroom in userPerm.ClassroomsWithPermissions)
+            {
+                var classroomPermission = new ClassroomPermission()
+                {
+                    ClassroomID = classroom.ClassroomID,
+                    UserID = userPerm.UserID
+                };
+                db.ClassroomPermissions.Add(classroomPermission);
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("", "User");
+        }
+
         private bool CheckUserPermission()
         {
             int uid = (int)Session["UserID"];
