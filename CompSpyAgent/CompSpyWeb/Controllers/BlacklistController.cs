@@ -20,7 +20,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                return View(db.Users.ToList());
+                return View(db.Blacklists.ToList());
             }
             return RedirectToAction("", "Home");
         }
@@ -34,6 +34,7 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name");
                 return View();
             }
             return RedirectToAction("", "Home");
@@ -41,7 +42,7 @@ namespace CompSpyWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult New([Bind(Include = "ProcessName")]Blacklist blacklist)
+        public ActionResult New([Bind(Include = "ProcessName, ClassroomID")]Blacklist blacklist)
         {
             if (Session["UserID"] == null)
             {
@@ -51,9 +52,9 @@ namespace CompSpyWeb.Controllers
             {
                 blacklist.CreatedOn = DateTime.Now;
                 blacklist.CreatorID = (int)Session["UserID"];
-                /*db.Users.Add(blacklist);*/
+                db.Blacklists.Add(blacklist);
                 db.SaveChanges();
-                return RedirectToAction("", "User");
+                return RedirectToAction("", "Blacklist");
             }
             return RedirectToAction("", "Home");
         }
@@ -67,25 +68,18 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                /*
-                var blacklist = (from user in db.Users
-                                where user.UserID == id
-                                select new EditUserViewModel()
-                                {
-                                    UserID = user.UserID,
-                                    Login = user.Login,
-                                    FirstName = user.FirstName,
-                                    LastName = user.LastName,
-                                    IsAdmin = user.IsAdmin
-                                }).FirstOrDefault();
-                return View(employee);*/
+                var blacklist = (from bl in db.Blacklists
+                                 where bl.BlacklistID == id
+                                 select bl).FirstOrDefault();
+                ViewBag.ClassroomID = new SelectList(db.Classrooms, "ClassroomID", "Name", blacklist.ClassroomID);
+                return View(blacklist);
             }
             return RedirectToAction("", "Home");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Blacklist process)
+        public ActionResult Edit([Bind(Include = "ProcessName, ClassroomID")]Blacklist blacklist)
         {
             if (Session["UserID"] == null)
             {
@@ -93,18 +87,16 @@ namespace CompSpyWeb.Controllers
             }
             if (CheckUserPermission())
             {
-                /*var processToEdit = (from p in db.Users
-                                  where p.UserID == process.UserID
-                                  select p).FirstOrDefault();
-                processToEdit.ProcessName = process.ProcessName;
-                //userToEdit.FirstName = user.FirstName;
-                //userToEdit.LastName = user.LastName;
-                //userToEdit.IsAdmin = user.IsAdmin;
-                
-                processToEdit.LastEdit = DateTime.Now;
-                processToEdit.EditorID = (int)Session["UserID"];
+                var blacklistToEdit = (from p in db.Blacklists
+                                       where p.BlacklistID == blacklist.BlacklistID
+                                       select p).FirstOrDefault();
+                blacklistToEdit.ProcessName = blacklist.ProcessName;
+                blacklistToEdit.ClassroomID = blacklist.ClassroomID;
+                blacklistToEdit.LastEdit = DateTime.Now;
+                blacklistToEdit.EditorID = (int)Session["UserID"];
+
                 db.SaveChanges();
-                return RedirectToAction("", "Blacklist");*/
+                return RedirectToAction("", "Blacklist");
             }
             return RedirectToAction("", "Home");
         }

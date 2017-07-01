@@ -65,7 +65,7 @@ namespace CompSpyWeb.Controllers
             var di = new DirectoryInfo(GetUploadsDirectory());
             foreach(FileInfo file in di.GetFiles())
             {
-                if (!protectedFiles.Contains(file.Name.Substring(0, file.Name.Length - 3)) &&
+                if (!protectedFiles.Contains(file.Name.Substring(0, file.Name.Length - 4)) &&
                     DateTime.Compare(file.CreationTime, DateTime.Now.AddSeconds(-30)) < 0)
                 {
                     file.Delete();
