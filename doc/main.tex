@@ -4,14 +4,27 @@
 \usepackage{polski}
 \usepackage{array}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+\lstset{language=C,caption={Descriptive Caption Text},label=DescriptiveLabel}
 
 \begin{document}
     \input{./00_strona_tytulowa}
     \tableofcontents
     \include{./10_opis_projektu}
-    \include{./20_wybor_tematu}
-    \include{./30_wymagania_funkcjonalne}
-    \include{./40_wymagania_niefunkcjonalne}
-    \include{./50_srodowisko}
-    \include{./60_baza_danych}
+    \include{./11_wybor_tematu}
+    \include{./12_architektura}
+    \include{./20_wymagania_funkcjonalne}
+    \include{./30_wymagania_pozafunkcjonalne}
+    \include{./40_srodowisko}
+    \include{./50_baza_danych}
+    \include{./61_diagramy_klas}
+    \include{./62_diagram_przypadki_uzycia}
+    \include{./70_interfejs}
+    \include{./80_bezpieczenstwo}
+    \include{./82_napotkane_problemy}
+    \include{./83_komunikacja}
+    \include{./81_testowanie}
+    \include{./83_podzial_prac}
+    \include{./85_mozliwosci_rozwoju}
 \end{document}

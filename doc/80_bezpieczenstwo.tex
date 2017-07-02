@@ -1,0 +1,15 @@
+\section{Bezpieczeństwo}
+
+Podczas tworzenia projektu postarano się, aby zapewnić w bezpieczeństwo pod wieloma aspektami. Poniżej przedstawiono najważniejsze z nich oraz sposoby ich zapewnienia.
+\newline
+
+Hasła przechowywane w bazie danych nie są przechowywane w formie jawnej, lecz w postaci heksadecymalnego skrótu powstałego przy użyciu funkcji skrótu SHA-256.  Podczas wpisywania samego hasła w polu tekstowym, hasło jest zakropkowane.
+
+
+W serwisie internetowym zapewniono, aby dostęp do poszczególnych funkcjonalności był możliwy tylko dla osób z odpowiednimi uprawnieniami (np. podgląd możliwy tylko dla użytkowników zalogowanych). Same widoki nie powinny być również dostępne po wpisaniu adresu w pasku adresu przeglądarki. 
+
+
+Innym rodzajem bezpieczeństwa jest zabezpieczenie przed zbędnym przesyłaniem pakietów i zmniejszeniu przepustowości sieci. Polega to na tym, że gdy żaden użytkownik w serwisie internetowym nie podgląda stanowisk, to stanowiska nie przesyłają w tym czasie dużych pakietów ze zrzutami ekranów, listą włączonych procesów oraz listą otwartych kart w przeglądarkach.
+
+
+Kolejnym zabezpieczeniem jest rozdzielenie użytkowników na użytkownika zalogowanego oraz administratora. Dzięki temu użytkownik ma dostęp do poglądu, ale nie może usunąć ani zarządzać grupami oraz stanowiskami. Uprawnienia do ich dodawania, edycji i usuwania ma tylko konto z uprawnieniami administratora.

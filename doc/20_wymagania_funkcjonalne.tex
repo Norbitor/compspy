@@ -1,0 +1,86 @@
+\section {Wymagania funkcjonalne}
+W poniższej sekcji przedstawiono wymagania funkcjonalne projektowanego systemu -- zbiór funkcjonalności, które zestaw aplikacji powinien spełnić. Wymagania dotyczą danych obszarów działania oraz związane są z aktorami (zewnętrzny obiekt wchodzący w interakcję z systemem).
+
+Na początku przedstawiono aktorów. Ich lista wraz z~opisem znajdują się w~Tabeli \ref{tab:actors}.
+
+\begin{table}[!ht]
+\caption{Aktorzy systemu}
+\label{tab:actors}
+\begin{tabular}{| m{2,7cm} | m{11cm} |} \hline
+Aktor & Opis aktora \\ \hline
+Aplikacja agenta   & Program zainstalowany na stanowisku                        komputerowym. Zbiera dane z maszyny klienta.\\ \hline
+
+Użytkownik zalogowany  & Jest to użytkownik, który ma możliwość                              zalogowania się na stronie, która znajduje się na                         serwerze i umożliwia podgląd\\
+                       
+                        & stanowisk połączonych z serwerem. \\ \hline
+
+Administrator   & Jest to użytkownik zalogowany, ale oprócz jego \\                                      &funkcjonalności może także zarządzać klientami, grupami \\
+                &stanowisk oraz użytkownikami. \\ \hline
+
+\end{tabular}
+\end{table}
+
+\newpage
+
+Tabela \ref{tab:functionalreq}. przedstawia zebrane wymagania funkcjonalne projektowanego systemu. W~kolejnych kolumnach opisano żądaną funkcjonalność, aktora (lub aktorów) (według Tabeli \ref{tab:actors}) uczestniczącego w~danej funkcjonalności oraz obszar działania tożsamy z~modułami aplikacji.
+
+\begin{table}[!ht]
+\caption{Lista wymagań funkcjonalnych}
+\label{tab:functionalreq}
+\begin{tabular}{| m{0.5cm} | m{7cm} | m{3cm} | m{2cm} |}
+\hline
+l.p. 
+    & Funkcjonalność 
+    & Aktor 
+    & Obszar 
+\\ \hline
+    1.   
+    & Wykonywanie zrzutów ekranu w~określonej częstotliwości i~przesyłanie ich do serwera
+    & Aplikacja agenta
+    & Agent, Serwer
+\\ \hline
+    2. 
+    & Definiowanie stanowisk komputerowych w systemie.
+    & Administrator
+    & Serwis internetowy
+\\ \hline
+    3.
+    & Tworzenie i zarządzanie grupami stanowisk.
+    & Administrator
+    & Serwis internetowy
+\\ \hline
+    4. 
+    & Podgląd wielu stanowisk jednocześnie w ramach wybranej grupy.
+    & Administrator, Użytkownik zalogowany
+    & Serwis internetowy
+\\ \hline
+    5. 
+    & Podgląd obrazu w lepszej jakości ze stanowisk wraz z listą uruchomionych aplikacji oraz kart z przeglądarek internetowych
+    & Administrator, Użytkownik zalogowany
+    & Serwis internetowy
+\\ \hline
+    6.
+    & Zarządzanie czarną listy procesów, które umożliwią alarmowanie monitorującego o naruszeniu zasad.
+    & Administrator
+    & Serwis internetowy
+\\ \hline
+    7.
+    & Wysyłanie wiadomości tekstowej do wybranego komputera lub grupy stanowisk.
+    & Administrator, Użytkownik zalogowany
+    & Serwis internetowy
+\\ \hline
+    8.
+    & Zarządzanie użytkownikami i administratorami.
+    & Administrator
+    & Serwis internetowy
+\\ \hline
+    9.
+    & Zarządzanie uprawnieniami użytkowników do sal.
+    & Administrator
+    & Serwis internetowy
+\\ \hline
+    
+\end{tabular}
+\end{table}
+
+

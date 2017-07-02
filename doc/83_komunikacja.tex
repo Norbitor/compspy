@@ -1,0 +1,76 @@
+\section{Komunikacja}
+
+W poniższym rozdziale zostanie w krótki sposób opisany sposób komunikacji pomiędzy poszczególnymi częściami systemu. Wyróżniamy dwa rodzaje komunikacji: pierwszy to komunikacja użytkownika serwisu internetowego z serwerem tego systemu, drugi to natomiast komunikacja klientów z serwerem. 
+
+\vspace{0.5cm}
+
+Komunikacja pomiędzy serwisem internetowym i jej klientem odbywa się w standardowy sposób dla technologii ASP.NET. Postawiony system na serwerze IIS(Internet Information Services) zawiera pliki napisane z wykorzystaniem HTML, JavaScript oraz C#. Komunikacja odbywa się za pośrednictwem protokołu HTTP.
+\vspace{0.5cm}
+
+Komunikacja pomiędzy klientami a serwisem internetowym wykorzystuje bibliotekę SignalR. Wykorzystanie jej jest opisane w rozdziale 12 zatytułowanym "Napotkane problemy". Poniżej natomiast przedstawiona jest budowa komunikatu, który jest wysyłany od klienta do serwera. 
+
+\vspace{0.5cm}
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu przedstawiający budowę klasy Komunikat},
+    label={lst:kod1},
+    style=sharpc]
+[DataContract]
+public class Komunikat
+{
+    [DataMember]
+    public String image { get; set; }
+    [DataMember]
+    public List<String> listaProcesow { get; set; }
+    [DataMember]
+    public List<String> listaStron { get; set; }
+
+    public Komunikat(String img, Process[] procesy,
+        List<String> strony) {
+        image = img;
+        listaProcesow = new List<String>();
+        listaStron = new List<String>();
+        foreach (var p in procesy)
+            listaProcesow.Add(p.ProcessName);
+        foreach (var s in strony)
+            listaStron.Add(s);
+    }
+}
+\end{lstlisting}
+
+Podczas tworzenia powyższego komunikatu wprowadzane są
+ dane aktualne z listy procesów, listy stron oraz tworzony jest zrzut ekranu. Po tym procesie komunikat jest serializowany. Format samego komunikatu, który jest już przesyłany do serwera jest w formacie XML. W kolejnym listingu przedstawiony jest przykład takiego pliku.
+ 
+ \begin{lstlisting}[frame=single,captionpos=b,
+    caption={Przykładowy komunikat przesyłany do serwera w formacie XML},
+    label={lst:kod1},
+    language=XML]
+<Spy.Komunikat 
+    xmlns="http://schemas.datacontract.org/2004/07/
+        CompSpyAgent"
+   xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <image>
+    ...
+    zrzut ekranu jako base64
+    ...
+  </image>
+  <listaProcesow xmlns:a="http://schemas.microsoft.com/2003/
+    10/Serialization/Arrays">
+    <a:string>svchost</a:string>
+    <a:string>notepad++</a:string>
+    <a:string>isesrv</a:string>
+    <a:string>services</a:string>
+    <a:string>winlogon</a:string>
+    <a:string>chrome</a:string>
+    <a:string>conhost</a:string>
+    <a:string>explorer</a:string>
+  </listaProcesow>
+  <listaStron xmlns:a="http://schemas.microsoft.com/
+    2003/10/Serialization/Arrays">
+    <a:string>[firefox]</a:string>
+    <a:string>URL: https://www.google.pl</a:string>
+    <a:string>Title: Google</a:string>
+    <a:string>[chrome]</a:string>
+    <a:string>Title: Onet.pl - Google Chrome</a:string>
+  </listaStron>
+</Spy.Komunikat>
+\end{lstlisting}

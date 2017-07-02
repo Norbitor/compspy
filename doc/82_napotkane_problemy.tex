@@ -1,0 +1,182 @@
+\lstdefinestyle{sharpc}{language=[Sharp]C, frame=lr, rulecolor=\color{blue!80!black}}
+
+
+\section{Napotkane problemy}
+
+W poniższym rozdziale opisane zostały najważniejsze problemy z jakimi spotkała się grupa projektowa w trakcie projektowania oraz już samej implementacji.
+\newline
+
+\subsection{Tworzenie zrzutów ekranu oraz pobieranie listy procesów aktywnych}
+Pierwszym problemem jaki wystąpił, było tworzenie zrzutów ekranu oraz listy procesów na komputerze klienta. To był najłatwiejszy problem z jakim spotkała się grupa. Aby rozwiązać problem wystarczyło wykorzystać dostępne w środowisku .NET funkcje. Samo zrobienie zrzutu to tak na prawdę wykorzystanie dokładnie jednej funkcji.
+
+\newline
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu odpowiedzialny za tworzenie zrzutów ekranu},
+    label={lst:kod1},
+    style=sharpc]
+bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
+    Screen.PrimaryScreen.Bounds.Height,
+    System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+    zrzut = Graphics.FromImage(bmp);
+    zrzut.CopyFromScreen(0, 0, 0, 0,
+        Screen.PrimaryScreen.Bounds.Size,
+        CopyPixelOperation.SourceCopy);
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu odpowiedzialny za pobranie listy aktywnych procesów},
+    label={lst:kod1},
+    style=sharpc]
+public Process[] listaProcesow;
+listaProcesow = Process.GetProcesses();
+\end{lstlisting}
+
+
+\subsection{Uzyskanie adresów kart w przeglądarkach internetowych}
+Drugim problemem było pytanie, jak uzyskać adresy stron internetowych. Samo wyświetlenie tytułów było łatwe, ponieważ wykorzystano podobnie jak w poprzednim problemie dostępne funkcje w środowisku. NET. Samo zdobycie tytułów otwartych okien zostało pokazane na przykładzie przeglądarki Chrome na listingu nr 3.
+\newline
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu odpowiedzialny za pobranie tytułu otwartej strony w przeglądarce Chrome.},
+    label={lst:kod1},
+    style=sharpc]
+foreach (var p in listaProcesow)
+{
+    if (Convert.ToString(p.ProcessName) == "chrome")
+    {
+        if (p.MainWindowTitle != "" ||
+            p.MainWindowTitle == " ")
+        {
+            listaStron.Add("[chrome]");
+            listaStron.Add ("Title: " + 
+                p.MainWindowTitle);
+        }
+    }
+}
+\end{lstlisting}
+
+Powyższy sposób został użyty do pobrania tytułów z przeglądarek: Chrome, Opera, Internet Explorer oraz Microsoft Edge (działanie tej ostatniej nie zostało potwierdzone, ze względu na brak testów w systemie Windows 10). Dzięki wykorzystaniu biblioteki NDde udało się pobrać nie tylko tytuł, ale także adres strony internetowej otwartej w przeglądarce Mozilla Firefox. Ze względu na ograniczony czas pracy nad systemem i wystąpieniem tak wielu problemów, obecnie nie działa to dla innych przeglądarek.
+
+\newline
+
+
+
+\begin{lstlisting}[frame=single,captionpos=b,
+caption                 ={Fragment kodu odpowiedzialny za pobranie adresu URL oraz tytułu otwartej strony w przeglądarce Mozilla Firefox},
+label                   ={lst:kod1},
+style                   =sharpc]
+
+using NDde.Client;
+
+public void getURLfirefox()
+{
+    try
+    {
+        DdeClient dde = new DdeClient("firefox",
+            "WWW_GetWindowInfo");
+        dde.Connect();
+        string url = dde.Request("URL", int.MaxValue);
+        string[] urls = url.Split(new string[] 
+            { ",", "\"" }, 
+            StringSplitOptions.RemoveEmptyEntries);
+        dde.Disconnect();
+        
+        listaStron.Add("[firefox]");
+        listaStron.Add("URL: " + urls[0]);
+        listaStron.Add("Title: " + urls[1]);
+    }
+    catch {}
+}
+\end{lstlisting}
+
+\subsection{Konwersja zrzutu ekranu}
+
+Następnym problemem, jaki napotkała grupa projektowa, było to to w jaki sposób przesłać zrzut ekranu. Okazało się że najlepszym sposobem będzie konwersja zdjęcia (już po zmianie formatu oraz rozmiaru w zależności od tego w jakiej jakości żąda serwer) do formatu tekstowego za pomocą konwersji do typu Base64. 
+
+\newline
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu odpowiedzialny za konwersję obrazu.},
+    label={lst:kod1},
+    style=sharpc]
+public String getImageBase64(Bitmap img)
+{
+    Graphics g = Graphics.FromImage(img);
+    
+    System.IO.MemoryStream stream = 
+        new System.IO.MemoryStream();
+    img.Save(stream, 
+        System.Drawing.Imaging.ImageFormat.Bmp);
+    byte[] imageBytes = stream.ToArray();
+    
+    return Convert.ToBase64String(imageBytes);       
+}
+\end{lstlisting}
+
+\subsection{Wykorzystanie SignalR}
+Po konwersji następuje już budowa samego komunikatu. Następnie następuje serializacja komunikatu i wysłanie go do serwera. Ale nie jest to takie łatwe, ponieważ problemem okazała się kwestia, aby nie przesyłać niepotrzebnie pakietów, gdy żaden użytkownik nie korzysta z serwisu internetowego i nie podgląda stanowisk. Rozwiązaniem okazało się wykorzystanie biblioteki SignalR. Pierwszym listingiem, który został ukazany jest sama konfiguracja uchwytu serwera, który zawiera w sobie hub do obsługi połączenia.
+
+\newpage
+\newline
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu - konstruktor klasy ServerHandler},
+    label={lst:kod1},
+    style=sharpc]
+public ServerHandler
+    (string hubAddr, ApplicationForm appForm)
+ {
+    this.hubAddr = hubAddr;
+    this.appForm = appForm;
+    
+    hubConnection = new HubConnection(hubAddr);
+    
+    computerHub = 
+        hubConnection.CreateHubProxy("ComputerHub");
+        
+    ConfigureRPCHandlers();
+}
+\end{lstlisting}
+
+Ważnym elementem wykorzystania tej klasy jest metoda ustanawiająca połączenie. Podczas nawiazywania tego połączenia jest przesyłana informacja o identyfikatorze stanowiska oraz sekret.
+
+
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu metody nawiązującej połączenie},
+    label={lst:kod1},
+    style=sharpc]
+private void EstablishConnection()
+{
+    var parameters = new Dictionary<string, string>
+    {
+        { "stationId", ConfigurationManager.AppSettings
+                ["stationDiscr"]},
+                
+        { "secret", ConfigurationManager.AppSettings
+                ["secret"] }
+    };
+    
+    computerHub.Invoke("Connect", 
+        ConfigurationManager.AppSettings
+        ["stationDiscr"]);
+}
+\end{lstlisting}
+
+\newpage
+Poniżej przedstawiono sposób wysyłania komunikatu dla żądania rozpoczęcia transmisji niskiej jakości. Fragment pochodzi z metody odpowiedzialnej za konfigurację uchwytu RPC.
+
+\begin{lstlisting}[frame=single,captionpos=b,
+    caption={Fragment kodu przedstawiający wysyłanie komunikatu dla rozpoczęcia transmisji niskiej jakości.},
+    label={lst:kod1},
+    style=sharpc]
+computerHub.On("StartLowQualityTransmission", () =>
+{
+    Spy spy = new Spy();
+    spy.Aktualizacja();
+    var data = spy.serializacja(false);
+    computerHub.Invoke("ReceiveData", data);
+});
+\end{lstlisting}
+
+
+
+
+
+
